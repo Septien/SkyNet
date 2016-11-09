@@ -1,6 +1,5 @@
 apt-get -qqy update
 apt-get -qqy install mysql-server-5.5 python-mysql
-apt-get -qqy install postgresql python-psycopg2
 apt-get -qqy install python-flask python-sqlalchemy
 apt-get -qqy install python-pip
 pip install bleach
