@@ -1,7 +1,8 @@
 apt-get -qqy update
-apt-get -qqy install mysql-server-5.5 python-mysql
+apt-get -qqy install -y mysql-server
 apt-get -qqy install python-flask python-sqlalchemy
 apt-get -qqy install python-pip
+apt-get install mysql-client-core-5.5
 pip install bleach
 pip install oauth2client
 pip install requests
