@@ -1,5 +1,7 @@
 import sys
 from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, DateTime, Date
+#http://docs.sqlalchemy.org/en/latest/dialects/mysql.html?highlight=text%20mysql#sqlalchemy.dialects.mysql.LONGTEXT
+from sqlalchemy.dialects.mysql import TEXT, BLOB
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -13,12 +15,12 @@ class Usuario(Base):
     #Nombre de la tabla
     __tablename__ = 'usuario'
     id = Column(Integer, primary_key = True)
-    nombre = Column(String, nullable = False)
-    apellido = Column(String, nullable = False)
+    nombre = Column(String(40), nullable = False)
+    apellido = Column(String(40), nullable = False)
     fechaDeNacimiento = Column(DateTime)
-    email = Column(String, nullable = False)
+    email = Column(String(40), nullable = False)
     genero = Column(String(1))
-    contrasena = Column(String, nullable = False)
+    contrasena = Column(String(16), nullable = False)
     disponibilidad = Column(Boolean, default = False)
     conectado = Column(Boolean, default = False)
 
@@ -28,13 +30,13 @@ class Fotos(Base):
     id = Column(Integer, primary_key = True)
     usuario = relationship(Usuario)
     uid = Column(Integer, ForeignKey('usuario.id'))
-    location = Column(String)
+    img = Column(BLOB)
 
 #Tabla Publicacion
 class Publicacion(Base):
     __tablename__ = 'publicacion'
     id = Column(Integer, primary_key = True)
-    texto = Column(String)
+    texto = Column(TEXT)
     fecha = Column(DateTime)
     num_likes = Column(Integer, default = 0)
     usuario = relationship(Usuario)
@@ -77,7 +79,7 @@ class Mensaje(Base):
     cid = Column(Integer, ForeignKey('chat.id'))
     usuario = relationship(Usuario)
     uid = Column(Integer, ForeignKey('usuario.id'))
-    texto = Column(String)
+    texto = Column(TEXT)
     fecha = Column(DateTime)
     fotos = relationship(Fotos)
     iid = Column(Integer, ForeignKey('fotos.id'))
