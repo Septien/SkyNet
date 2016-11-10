@@ -31,3 +31,14 @@ class Publicacion(Base):
     num_likes = Column(Integer, default = 0)
     usuario = relationship(Usuario)
     uid = Column(Integer, ForeignKey('usuario.id'))
+
+#Tabla de amigos
+class Amigos(Base):
+    __tablename__ = 'amigos'
+    usuario = relationship(Usuario)
+    uid = Column(Integer, ForeignKey('usuario.id'), primary_key = True)
+    amigo_id = Column(Integer, ForeignKey('usuario.id'), primary_key = True)
+    permiso_compartir = Column(Boolean, default = True)
+    ver_contenido = Column(Boolean, default = True)
+    Boolean = Column(Boolean, default = False)
+    notificaciones = Column(Boolean, default = True)
