@@ -53,4 +53,10 @@ class Amigos(Base):
     Boolean = Column(Boolean, default = False)
     notificaciones = Column(Boolean, default = True)
 
-
+#Tabla de chat
+class Chat(Base):
+    __tablename__ = 'chat'
+    chat_id = Column(Integer, primary_key = True)
+    usuario = relationship(Usuario)
+    uid = Column(Integer, ForeignKey('usuario.id'))
+    amigo_id = Column(Integer, ForeignKey('usuario.id'))
