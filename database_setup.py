@@ -39,8 +39,8 @@ class Publicacion(Base):
     num_likes = Column(Integer, default = 0)
     usuario = relationship(Usuario)
     uid = Column(Integer, ForeignKey('usuario.id'))
-    foto = relationship(Fotos)
-    fid = Column(Integer, ForeignKey('foto.id'))
+    fotos = relationship(Fotos)
+    fid = Column(Integer, ForeignKey('fotos.id'))
 
 #Tabla de etiquetas
 class Etiquetas(Base):
@@ -79,8 +79,8 @@ class Mensaje(Base):
     uid = Column(Integer, ForeignKey('usuario.id'))
     texto = Column(String)
     fecha = Column(DateTime)
-    img = relationship(Fotos)
-    iid = Column(Integer, ForeignKey('img.id'))
+    fotos = relationship(Fotos)
+    iid = Column(Integer, ForeignKey('fotos.id'))
     ultimo = Column(Boolean, default = True)
 
 #http://stackoverflow.com/questions/22252397/importerror-no-module-named-mysqldb
