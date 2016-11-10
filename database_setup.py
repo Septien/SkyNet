@@ -83,5 +83,10 @@ class Mensaje(Base):
     iid = Column(Integer, ForeignKey('img.id'))
     ultimo = Column(Boolean, default = True)
 
-engine = create_engine("mysql://root:12345@localhost/skynet")
+#http://stackoverflow.com/questions/22252397/importerror-no-module-named-mysqldb
+engine = create_engine("mysql+pymysql://root:12345@localhost/")
+#http://stackoverflow.com/questions/10770377/howto-create-db-mysql-with-sqlalchemy
+engine.execute("DROP DATABASE IF EXISTS skynet")
+engine.execute("CREATE DATABASE skynet")
+engine.execute("USE skynet")
 Base.metadata.create_all(engine)
