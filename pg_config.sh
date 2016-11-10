@@ -7,7 +7,7 @@ apt-get -qqy install python-pip
 apt-get install mysql-client-core-5.5
 apt-get install python-dev libmysqlclient-dev
 pip install -U pip
-pip install MySQL-python
+pip install PyMySQL
 pip install bleach
 pip install oauth2client
 pip install requests
@@ -26,3 +26,5 @@ tar xvzf redis-stable.tar.gz
 cd redis-stable
 make
 make install
+
+#sudo mysql -u root -p

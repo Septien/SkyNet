@@ -83,5 +83,5 @@ class Mensaje(Base):
     iid = Column(Integer, ForeignKey('img.id'))
     ultimo = Column(Boolean, default = True)
 
-engine = create_engine("mysql + pmysql://root:12345@localhost/test?charset=utf8")
+engine = create_engine("mysql://root:12345@localhost/skynet")
 Base.metadata.create_all(engine)
