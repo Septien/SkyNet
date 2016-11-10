@@ -58,7 +58,7 @@ class Amigos(Base):
     amigo_id = Column(Integer, ForeignKey('usuario.id'), primary_key = True)
     permiso_compartir = Column(Boolean, default = True)
     ver_contenido = Column(Boolean, default = True)
-    Boolean = Column(Boolean, default = False)
+    bloqueado = Column(Boolean, default = False)
     notificaciones = Column(Boolean, default = True)
 
 #Tabla de chat
