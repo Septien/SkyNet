@@ -25,7 +25,7 @@ class Usuario(Base):
 #Tabla de fotos
 class Fotos(Base):
     __tablename__ = 'fotos'
-    id = Column(Integer)
+    id = Column(Integer, primary_key = True)
     usuario = relationship(Usuario)
     uid = Column(Integer, ForeignKey('usuario.id'))
     location = Column(String)
