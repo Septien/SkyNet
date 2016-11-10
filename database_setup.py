@@ -71,7 +71,7 @@ class Chat(Base):
 
 #Tabla de mensajes de chat
 class Mensaje(Base):
-    __tablename__ = 'chat'
+    __tablename__ = 'mensaje'
     id = Column(Integer, primary_key = True)
     chat = relationship(Chat)
     cid = Column(Integer, ForeignKey('chat.id'))
