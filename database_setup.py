@@ -19,8 +19,8 @@ class Usuario(Base):
     email = Column(String, nullable = False)
     genero = Column(String(1))
     contrasena = Column(String, nullable = False)
-    disponibilidad = (Boolean, default = False)
-    conectado = (Boolean, default = False)
+    disponibilidad = Column(Boolean, default = False)
+    conectado = Column(Boolean, default = False)
 
 #Tabla de fotos
 class Fotos(Base):
