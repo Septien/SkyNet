@@ -82,3 +82,6 @@ class Mensaje(Base):
     img = relationship(Fotos)
     iid = Column(Integer, ForeignKey('img.id'))
     ultimo = Column(Boolean, default = True)
+
+engine = create_engine("mysql + pmysql://root:12345@localhost/test?charset=utf8")
+Base.metadata.create_all(engine)
