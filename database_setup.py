@@ -22,4 +22,12 @@ class Usuario(Base):
     disponibilidad = (Boolean, default = False)
     conectado = (Boolean, default = False)
 
-
+#Tabla Publicacion
+class Publicacion(Base):
+    __tablename__ = 'publicacion'
+    id = Column(Integer, primary_key = True)
+    texto = Column(String)
+    fecha = Column(DateTime)
+    num_likes = Column(Integer, default = 0)
+    usuario = relationship(Usuario)
+    uid = Column(Integer, ForeignKey('usuario.id'))
