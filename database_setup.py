@@ -42,6 +42,14 @@ class Publicacion(Base):
     foto = relationship(Fotos)
     fid = Column(Integer, ForeignKey('foto.id'))
 
+#Tabla de etiquetas
+class Etiquetas(Base):
+    __tablename__ = 'etiquetas'
+    publicacion = relationship(Publicacion)
+    pid = Column(Integer, ForeignKey('publicacion.id'), primary_key = True)
+    usuario = relationship(Usuario)
+    uid = Column(Integer, ForeignKey('usuario.id'), primary_key = True)
+
 #Tabla de amigos
 class Amigos(Base):
     __tablename__ = 'amigos'
