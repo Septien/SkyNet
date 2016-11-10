@@ -16,6 +16,9 @@ usuarios.
 
 Para simular el proyecto, se hará uso de una Virtual Box y de valgrant.
 
+*Nota: Para poder simularlo adecuadamente, se sugiere que se tenga instalado
+el paquete cygwin o git bash.
+
 Instalar Virtual Box:
 Dirígete a la [página](https://www.virtualbox.org/wiki/Downloads) y
 descarga la versión 4.3.0. Instálala siguiendo los pasos.
