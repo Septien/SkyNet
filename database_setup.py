@@ -39,6 +39,8 @@ class Publicacion(Base):
     num_likes = Column(Integer, default = 0)
     usuario = relationship(Usuario)
     uid = Column(Integer, ForeignKey('usuario.id'))
+    foto = relationship(Fotos)
+    fid = Column(Integer, ForeignKey('foto.id'))
 
 #Tabla de amigos
 class Amigos(Base):
