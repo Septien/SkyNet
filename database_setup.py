@@ -22,6 +22,14 @@ class Usuario(Base):
     disponibilidad = (Boolean, default = False)
     conectado = (Boolean, default = False)
 
+#Tabla de fotos
+class Fotos(Base):
+    __tablename__ = 'fotos'
+    id = Column(Integer)
+    usuario = relationship(Usuario)
+    uid = Column(Integer, ForeignKey('usuario.id'))
+    location = Column(String)
+
 #Tabla Publicacion
 class Publicacion(Base):
     __tablename__ = 'publicacion'
@@ -42,3 +50,5 @@ class Amigos(Base):
     ver_contenido = Column(Boolean, default = True)
     Boolean = Column(Boolean, default = False)
     notificaciones = Column(Boolean, default = True)
+
+
