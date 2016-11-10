@@ -60,3 +60,17 @@ class Chat(Base):
     usuario = relationship(Usuario)
     uid = Column(Integer, ForeignKey('usuario.id'))
     amigo_id = Column(Integer, ForeignKey('usuario.id'))
+
+#Tabla de mensajes de chat
+class Mensaje(Base):
+    __tablename__ = 'chat'
+    id = Column(Integer, primary_key = True)
+    chat = relationship(Chat)
+    cid = Column(Integer, ForeignKey('chat.id'))
+    usuario = relationship(Usuario)
+    uid = Column(Integer, ForeignKey('usuario.id'))
+    texto = Column(String)
+    fecha = Column(DateTime)
+    img = relationship(Fotos)
+    iid = Column(Integer, ForeignKey('img.id'))
+    ultimo = Column(Boolean, default = True)
