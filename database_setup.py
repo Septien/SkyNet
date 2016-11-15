@@ -37,7 +37,7 @@ class Publicacion(Base):
     __tablename__ = 'publicacion'
     id = Column(Integer, primary_key = True)
     texto = Column(TEXT)
-    fecha = Column(TIMESTAMP)
+    fecha = Column(TIMESTAMP, server_default = text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
     num_likes = Column(Integer, default = 0)
     usuario = relationship(Usuario)
     uid = Column(Integer, ForeignKey('usuario.id'))
@@ -80,7 +80,7 @@ class Mensaje(Base):
     usuario = relationship(Usuario)
     uid = Column(Integer, ForeignKey('usuario.id'))
     texto = Column(TEXT)
-    fecha = Column(TIMESTAMP)
+    fecha = Column(TIMESTAMP, server_default = text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
     fotos = relationship(Fotos)
     iid = Column(Integer, ForeignKey('fotos.id'))
     ultimo = Column(Boolean, default = True)
