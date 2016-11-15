@@ -37,6 +37,7 @@ class Publicacion(Base):
     __tablename__ = 'publicacion'
     id = Column(Integer, primary_key = True)
     texto = Column(TEXT)
+    #http://stackoverflow.com/questions/6992321/how-to-set-default-on-update-current-timestamp-in-mysql-with-sqlalchemy
     fecha = Column(TIMESTAMP, server_default = text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
     num_likes = Column(Integer, default = 0)
     usuario = relationship(Usuario)
