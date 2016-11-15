@@ -1,7 +1,7 @@
 import sys
 from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, DateTime, Date
 #http://docs.sqlalchemy.org/en/latest/dialects/mysql.html?highlight=text%20mysql#sqlalchemy.dialects.mysql.LONGTEXT
-from sqlalchemy.dialects.mysql import TEXT, BLOB
+from sqlalchemy.dialects.mysql import TEXT, BLOB, TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -37,7 +37,7 @@ class Publicacion(Base):
     __tablename__ = 'publicacion'
     id = Column(Integer, primary_key = True)
     texto = Column(TEXT)
-    fecha = Column(DateTime)
+    fecha = Column(TIMESTAMP)
     num_likes = Column(Integer, default = 0)
     usuario = relationship(Usuario)
     uid = Column(Integer, ForeignKey('usuario.id'))
@@ -80,7 +80,7 @@ class Mensaje(Base):
     usuario = relationship(Usuario)
     uid = Column(Integer, ForeignKey('usuario.id'))
     texto = Column(TEXT)
-    fecha = Column(DateTime)
+    fecha = Column(TIMESTAMP)
     fotos = relationship(Fotos)
     iid = Column(Integer, ForeignKey('fotos.id'))
     ultimo = Column(Boolean, default = True)
