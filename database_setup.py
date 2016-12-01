@@ -18,6 +18,7 @@ class Usuario(Base):
     nombre = Column(String(40), nullable = False)
     apellido = Column(String(40), nullable = False)
     fechaDeNacimiento = Column(DateTime)
+    username = Column(String(40))
     email = Column(String(40), nullable = False)
     genero = Column(String(1))
     contrasena = Column(String(16), nullable = False)
