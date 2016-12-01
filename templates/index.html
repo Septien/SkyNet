@@ -48,7 +48,13 @@
                                     </div>
                                 </div>
                               </div>
-
+                              {% with message = get_flashed_messages()%}
+                              {%if message%}
+                              <ul>
+                                <li><strong>{{message}}</strong></li>
+                              </ul>
+                              {%endif%}
+                              {%endwith%}
 
                             <div class="form-group ">
                                 <button type="button" class="btn btn-primary btn-lg btn-block login-button">Login</button>
