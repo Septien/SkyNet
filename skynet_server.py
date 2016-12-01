@@ -19,9 +19,16 @@ dbsession = DBSession()
 app = Flask(__name__)
 
 @app.route("/")
-@app.route("/index")
+@app.route("/index", methods = ['POST', 'GET'])
 def index():
-    return render_template("index.html")
+    if request.method == 'POST':
+        query = dbsession.query(Usuario).filter(User.emal == request.form["email"])
+        exists = dbsession.query(query)
+        if exists == 0:
+            flash("User no registered.")
+        return render_template("index.html")
+    else:
+        return render_template("index.html")
 
 @app.route("/register")
 def register():
