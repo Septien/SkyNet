@@ -49,13 +49,22 @@ def index():
 @app.route("/register", methods = ['GET', 'POST'])
 def register():
     if request.method == 'POST':
+        name = request.form['name']
+        lastname = request.form['LastName']
+        email = request.form['email']
+        pwd = request.form['password']
+
+        if not name or not lastname or not email or not pwd:
+            flash("Missing field")
+            return render_template("register.html")
         newUser = Usuario(nombre = request.form['name'], apellido = request.form['LastName'], email = request.form['email'], contrasena = request.form['password'])
         return render_template("register.html")
     else:
         return render_template("register.html")
 
-@app.route("/<string:username>/home")
-def home(username):
+#/<string:username>, username
+@app.route("/home")
+def home():
     return render_template("home.html")
 
 if __name__ == '__main__':
