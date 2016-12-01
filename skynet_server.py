@@ -1,6 +1,6 @@
 import sys
 #Modulos necesarios para usar Flask
-from flask import Flask, render_template, url_for, request, redirect, flash
+from flask import Flask, render_template, url_for, request, redirect, flash, session
 #Modulos necesario para usar SQLAlchemy y base de datos
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -13,7 +13,7 @@ db.Base.metadata.bind = engine
 
 #Crear sesion para comunicarse con la base de datos
 DBSession = sessionmaker(bind = engine)
-session = DBSession()
+dbsession = DBSession()
 
 #Inicializa la app de Flask
 app = Flask(__name__)
