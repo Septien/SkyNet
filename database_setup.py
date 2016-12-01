@@ -40,6 +40,7 @@ class Fotos(Base):
 
     #The image
     img = Column(BLOB)
+    profile = Column(Boolean, default = False)
 
 #Tabla Publicacion
 class Publicacion(Base):
