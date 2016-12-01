@@ -74,8 +74,9 @@ class Amigos(Base):
     #Foregin and primary keys
     uid = Column(Integer, ForeignKey('usuario.id'), primary_key = True)
     amigo_id = Column(Integer, ForeignKey('usuario.id'), primary_key = True)
-    usuario = relationship(Usuario, foreign_keys = [uid])
-    amigo = relationship(Usuario, foreign_keys = [amigo_id])
+    #http://stackoverflow.com/questions/8405070/2-relationships-of-the-same-tablename-confusing-sqlalchemy
+    usuario = relationship(Usuario, foreign_keys = [uid], primaryjoin = "Amigos.uid == Usuario.id")
+    amigo = relationship(Usuario, foreign_keys = [amigo_id], primaryjoin = "Amigos.amigo_id == Usuario.id")
 
     #Information needed
     permiso_compartir = Column(Boolean, default = True)
@@ -92,8 +93,8 @@ class Chat(Base):
     #Foreign keys
     uid = Column(Integer, ForeignKey('usuario.id'))
     amigo_id = Column(Integer, ForeignKey('usuario.id'))
-    usuario = relationship(Usuario, foreign_keys = [uid])
-    amigo = relationship(Usuario, foreign_keys = [amigo_id])
+    usuario = relationship(Usuario, foreign_keys = [uid], primaryjoin="Chat.uid == Usuario.id")
+    amigo = relationship(Usuario, foreign_keys = [amigo_id], primaryjoin="Chat.amigo_id == Usuario.id")
 
 #Tabla de mensajes de chat
 class Mensaje(Base):
