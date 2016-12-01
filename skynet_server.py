@@ -46,9 +46,13 @@ def index():
     else:
         return render_template("index.html")
 
-@app.route("/register")
+@app.route("/register", methods = ['GET', 'POST'])
 def register():
-    return render_template("register.html")
+    if request.method == 'POST':
+        newUser = Usuario(nombre = request.form['name'], apellido = request.form['LastName'], email = request.form['email'], contrasena = request.form['password'])
+        return render_template("register.html")
+    else:
+        return render_template("register.html")
 
 @app.route("/<string:username>/home")
 def home(username):
