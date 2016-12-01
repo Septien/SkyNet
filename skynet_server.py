@@ -2,18 +2,18 @@ import sys
 #Modulos necesarios para usar Flask
 from flask import Flask, render_template, url_for, request, redirect, flash, session
 #Modulos necesario para usar SQLAlchemy y base de datos
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
-import database_setup as db
+from database_setup import Base, Usuario, Fotos, Publicacion, Amigos, Etiquetas, Chat, Mensaje
 
 #Crear motor de base de datos
 engine = create_engine("mysql+pymysql://root:12345@localhost/")
 engine.execute("USE skynet")
-db.Base.metadata.bind = engine
+Base.metadata.bind = engine
 
 #Crear sesion para comunicarse con la base de datos
 DBSession = sessionmaker(bind = engine)
-dbsession = DBSession()
+session = DBSession()
 
 #Inicializa la app de Flask
 app = Flask(__name__)
@@ -22,10 +22,23 @@ app = Flask(__name__)
 @app.route("/index", methods = ['POST', 'GET'])
 def index():
     if request.method == 'POST':
-        query = dbsession.query(Usuario).filter(User.emal == request.form["email"])
-        exists = dbsession.query(query)
+        email = request.form['email']
+        password = request.form['password']
+        if not email or not password:
+            flash("Missing field")
+            return render_template("index.html")
+        q = session.query(Usuario).filter(email = email)
+        q1 = session.query(q.exists())
+        exists = q1.fetch.one();
         if exists == 0:
-            flash("User no registered.")
+            flash("User no registered or incorrect password")
+            return render_template("index.html")
+        q = session.query(Usuario).filter(email = email)
+        user = query.fetch.one()
+        if password != user.contrasena:
+            flash("User no registered or incorrect password")
+            return render_template("index.html")
+        username = pwd.username
         return render_template("index.html")
     else:
         return render_template("index.html")
@@ -33,6 +46,7 @@ def index():
 @app.route("/register")
 def register():
     return render_template("register.html")
+
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
