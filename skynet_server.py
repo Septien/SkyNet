@@ -3,6 +3,7 @@ import sys
 from flask import Flask, render_template, url_for, request, redirect, flash, session
 #Modulos necesario para usar SQLAlchemy y base de datos
 from sqlalchemy import create_engine, text
+from sqlalchemy.sql import exists
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Usuario, Fotos, Publicacion, Amigos, Etiquetas, Chat, Mensaje
 
@@ -27,10 +28,10 @@ def index():
         if not email or not password:
             flash("Missing field")
             return render_template("index.html")
-        q = session.query(Usuario).filter(email = email)
-        q1 = session.query(q.exists())
-        exists = q1.fetch.one();
-        if exists == 0:
+        #http://stackoverflow.com/questions/1676551/best-way-to-test-if-a-row-exists-in-a-mysql-table
+        #http://stackoverflow.com/questions/7646173/sqlalchemy-exists-for-query
+        q =  session.query(exists().where(Usuario.email == email)).scalar()
+        if not q:
             flash("User no registered or incorrect password")
             return render_template("index.html")
         q = session.query(Usuario).filter(email = email)
@@ -39,6 +40,8 @@ def index():
             flash("User no registered or incorrect password")
             return render_template("index.html")
         username = pwd.username
+        user.conectado = True
+        user.disponibilidad = True
         return render_template("index.html")
     else:
         return render_template("index.html")
