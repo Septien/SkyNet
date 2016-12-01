@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Start</title>
+    <title>Register</title>
     <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:700" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel='stylesheet' type="text/css" href="{{ url_for('static', filename='public/stylesheets/reset.css') }}" />
@@ -60,11 +60,18 @@
                                 </div>
                             </div>
                         </div>
-
-
+                        <div>
+                        {% with message = get_flashed_messages()%}
+                            {%if message%}
+                            <ul>
+                                <li><strong>{{message}}</strong></li>
+                            </ul>
+                        {%endif%}
+                        {%endwith%}
+                        </div>
 
                         <div class="form-group ">
-                            <button type="button" class="btn btn-primary btn-lg btn-block login-button">Register</button>
+                            <button type="submit" class="btn btn-primary btn-lg btn-block login-button">Register</button>
                         </div>
                         <div class="login-register">
                             <a href="{{ url_for('index') }}">Login</a>
