@@ -47,6 +47,9 @@ def index():
 def register():
     return render_template("register.html")
 
+@app.route("/<string:username>/home")
+def home(username):
+    return render_template("home.html")
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
