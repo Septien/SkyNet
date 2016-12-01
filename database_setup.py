@@ -1,5 +1,5 @@
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, DateTime, Date
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, DateTime, Date, text
 #http://docs.sqlalchemy.org/en/latest/dialects/mysql.html?highlight=text%20mysql#sqlalchemy.dialects.mysql.LONGTEXT
 from sqlalchemy.dialects.mysql import TEXT, BLOB, TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
