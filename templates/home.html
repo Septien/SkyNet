@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>home</title>
+    <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:700" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet' type="text/css" href="{{ url_for('static', filename='public/stylesheets/reset.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='public/stylesheets/bootstrap.min.css') }}">
+    <link rel='stylesheet' type="text/css" href="{{ url_for('static', filename='public/stylesheets/style.css') }}" />
+
+  </head>
+  <body>
+      <nav class="navbar navbar-inverse" >
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">{{title}}</a>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="profile">Profile <span class="sr-only">(current)</span></a></li>
+              <li><a href="home">HOME</a></li>
+              <li>
+                <a>what's going on?</a>
+              </li>
+            </ul>
+            <form class="navbar-form navbar-left">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search">
+              </div>
+              <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="#">Link</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Settings <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Edit Profile</a></li>
+                  <li><a href="#">Additional Info</a></li>
+                  <li><a href="#">Credits</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="/">Log out</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+
+    <div class="container">
+     <div class="row">
+    <div class="col-md-3">
+        <h3>Contacts</h3>
+
+        <div class="block-contact" class="list-group">
+          <div class="col-sm-3" id="imgCnt">
+            <img src="/images/cnt.jpg" alt="Scott Stevens" class="img-responsive img-circle" >
+          </div>
+          <div class="col-sm-9" id="textCnt">
+                  <a href="#" class="list-group-item" >Dapibus ac facilisis</a>
+          </div>
+        </div>
+
+
+
+
+
+
+    </div>
+
+    <div class="col-md-6" >
+        <div id="profileContainer">
+
+            <div class="col-md-2">
+                            <div class="thumbnail" >
+                                <img src="/images/cnt.jpg" alt="...">
+                            </div>
+            </div>
+
+            <h3 class="info-post">Raul Jimenez</h3>
+            <h4 class="info-post">22/09/2016</h4>
+            <div class="content-post">
+                            <p>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            </p>
+            </div>
+
+
+        </div>
+
+
+
+
+    </div>
+
+    <div class="col-md-3">
+        <div class="profileContainer">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <span class="badge">14</span>
+                Cras justo odio
+              </li>
+              <li class="list-group-item">
+                <span class="badge">1</span>
+                Erick dwuedbwiud
+              </li>
+              <li class="list-group-item">
+                <span class="badge">5</span>
+                efwk 3345 Osvaldo
+              </li>
+              <li class="list-group-item">
+                <span class="badge">0</span>
+                prepifneoirfoer
+              </li>
+              <li class="list-group-item">
+                <span class="badge">9</span>
+                ejrhbfebf eb frufiuerb
+              </li>
+               <li class="list-group-item">
+                <span class="badge">0</span>
+                prepifneoirfoer
+              </li>
+              <li class="list-group-item">
+                <span class="badge">9</span>
+                ejrhbfebf eb frufiuerb
+              </li>
+            </ul>
+
+        </div>
+    </div>
+
+</div>
+    </div>
+  </body>
+</html>
