@@ -6,11 +6,17 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.sql import exists
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Usuario, Fotos, Publicacion, Amigos, Etiquetas, Chat, Mensaje
+#For regular expresions
+import re
 
 #Crear motor de base de datos
 engine = create_engine("mysql+pymysql://root:12345@localhost/")
 engine.execute("USE skynet")
 Base.metadata.bind = engine
+
+#Create reg exp for verifying email
+emailPattern = '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+regexp = re.compile(emailPattern)
 
 #Crear sesion para comunicarse con la base de datos
 DBSession = sessionmaker(bind = engine)
@@ -27,6 +33,12 @@ def index():
         password = request.form['password']
         if not email or not password:
             flash("Missing field")
+            return render_template("index.html")
+
+        #Check for validity of email
+        r = regexp.match(email)
+        if r == None:
+            flash("Incorrect email format")
             return render_template("index.html")
 
         #http://stackoverflow.com/questions/1676551/best-way-to-test-if-a-row-exists-in-a-mysql-table
@@ -57,6 +69,12 @@ def register():
 
         if not name or not lastname or not email or not pwd:
             flash("Missing field")
+            return render_template("register.html")
+
+        #Check for validity of email
+        r = regexp.match(email)
+        if r == None:
+            flash("Incorrect email format")
             return render_template("register.html")
 
         newUser = Usuario(nombre = name, apellido = lastname, email = email, contrasena = pwd)
