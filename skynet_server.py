@@ -52,7 +52,8 @@ def index():
         if password != user.contrasena:
             flash("User no registered or incorrect password")
             return render_template("index.html")
-        username = pwd.username
+        index = email.find('@')
+        username = email[0: index]
         user.conectado = True
         user.disponibilidad = True
         return render_template("index.html")
