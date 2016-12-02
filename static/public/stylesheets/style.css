@@ -1,0 +1,142 @@
+
+
+body, html{
+     height: 100%;
+ background-image: url("../images/backg.jpg");
+ background-size: auto;
+  font-family: 'Oxygen', sans-serif;
+}
+
+.main{
+  margin-top: 70px;
+}
+
+h1.title { 
+  font-size: 50px;
+  font-family: 'Passion One', cursive; 
+  font-weight: 400; 
+}
+
+hr{
+  width: 10%;
+  color: #fff;
+}
+
+.form-group{
+  margin-bottom: 15px;
+}
+
+label{
+  margin-bottom: 15px;
+}
+
+input,
+input::-webkit-input-placeholder {
+    font-size: 11px;
+    padding-top: 3px;
+}
+
+.main-login{
+  background: rgba(255, 255, 255, 0.7);
+    /* shadows and rounded borders */
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+
+}
+
+.main-center{
+  margin-top: 30px;
+  margin: 0 auto;
+  max-width: 330px;
+    padding: 40px 40px;
+
+}
+
+.login-button{
+  margin-top: 5px;
+}
+
+.login-register{
+  font-size: 11px;
+  text-align: center;
+}
+
+#btn-pos{
+  margin-bottom: 15px;
+}
+
+#profileContainer{
+  background: rgba(243, 237, 234, 0.9);
+  background-position: cover;
+  border-radius: 3px 3px 3px 3px;
+  -moz-border-radius: 3px 3px 3px 3px;
+  -webkit-border-radius: 3px 3px 3px 3px;
+  border: 0px solid #000000;
+  padding: 10px 15px 10px 15px;
+  margin-bottom: 15px;
+
+
+}
+
+.info-post{
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 0;
+}
+
+.content-post{
+  display: inline-block;
+  margin-left: 50px;
+}
+
+#rm-margin{
+
+  margin-top: 0px;
+}
+
+.logo{
+  width: 100%;
+  font-size: 108px;
+  color: white;
+  text-align: center;
+
+
+}
+
+.subtext{
+  width: 100%;
+  font-size: 28px;
+  color: white;
+  text-align: center;
+}
+
+.block-contact{
+  display: inline-block;
+  background: white;
+  background-position: cover;
+  border-radius: 3px 3px 3px 3px;
+  -moz-border-radius: 3px 3px 3px 3px;
+  -webkit-border-radius: 3px 3px 3px 3px;
+  border: 1px solid #000000;
+  text-align: center;
+  padding: 5px;
+ 
+
+}
+
+#imgCnt{
+
+ padding: 0px;
+
+}
+
+#textCnt{
+
+  padding-top: 13px;
+
+}
