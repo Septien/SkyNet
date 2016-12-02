@@ -28,6 +28,7 @@ def index():
         if not email or not password:
             flash("Missing field")
             return render_template("index.html")
+
         #http://stackoverflow.com/questions/1676551/best-way-to-test-if-a-row-exists-in-a-mysql-table
         #http://stackoverflow.com/questions/7646173/sqlalchemy-exists-for-query
         q =  session.query(exists().where(Usuario.email == email)).scalar()
@@ -57,7 +58,8 @@ def register():
         if not name or not lastname or not email or not pwd:
             flash("Missing field")
             return render_template("register.html")
-        newUser = Usuario(nombre = request.form['name'], apellido = request.form['LastName'], email = request.form['email'], contrasena = request.form['password'])
+
+        newUser = Usuario(nombre = name, apellido = lastname, email = email, contrasena = pwd)
         return render_template("register.html")
     else:
         return render_template("register.html")
