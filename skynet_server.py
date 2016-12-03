@@ -43,12 +43,11 @@ def index():
 
         #http://stackoverflow.com/questions/1676551/best-way-to-test-if-a-row-exists-in-a-mysql-table
         #http://stackoverflow.com/questions/7646173/sqlalchemy-exists-for-query
-        q =  session.query(exists().where(Usuario.email == email)).scalar()
+        q = session.query(exists().where(Usuario.email == email)).scalar()
         if not q:
             flash("User no registered or incorrect password")
             return render_template("index.html")
-        q = session.query(Usuario).filter(email = email)
-        user = query.fetch.one()
+        user = session.query(Usuario).filter(email == email).one()
         if password != user.contrasena:
             flash("User no registered or incorrect password")
             return render_template("index.html")
@@ -56,7 +55,9 @@ def index():
         username = email[0: index]
         user.conectado = True
         user.disponibilidad = True
-        return render_template("index.html")
+        session.add(user)
+        session.commit()
+        return redirect(url_for("home", username = username))
     else:
         return render_template("index.html")
 
@@ -78,7 +79,9 @@ def register():
             flash("Incorrect email format")
             return render_template("register.html")
 
-        newUser = Usuario(nombre = name, apellido = lastname, email = email, contrasena = pwd)
+        index = email.find('@')
+        username = email[0: index]
+        newUser = Usuario(nombre = name, apellido = lastname, email = email, contrasena = pwd, username = username)
         session.add(newUser)
         session.commit()
         return render_template("register.html")
@@ -86,8 +89,14 @@ def register():
         return render_template("register.html")
 
 #/<string:username>, username
-@app.route("/home")
-def home():
+@app.route("/<string:username>/home")
+def home(username):
+    q = session.query(exists().where(Usuario.username == username)).scalar()
+    if not q:
+        flash("User no registered")
+        return render_template("index.html")
+    q = session.query(Usuario).filter(Usuario.username == username)
+
     return render_template("home.html")
 
 if __name__ == '__main__':
