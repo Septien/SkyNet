@@ -99,6 +99,10 @@ def home(username):
 
     return render_template("home.html")
 
+@app.route("/profile")
+def profile():
+    return render_template("profile.html")
+
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
