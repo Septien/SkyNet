@@ -79,12 +79,18 @@ def register():
             flash("Incorrect email format")
             return render_template("register.html")
 
+        #Check if user not already exists
+        q = session.query(exists().where(Usuario.email == email)).scalar()
+        if q:
+            flash("User already redister")
+            return render_template("register.html")
+
         index = email.find('@')
         username = email[0: index]
         newUser = Usuario(nombre = name, apellido = lastname, email = email, contrasena = pwd, username = username)
         session.add(newUser)
         session.commit()
-        return render_template("register.html")
+        return redirect(url_for("home", username = username))
     else:
         return render_template("register.html")
 
