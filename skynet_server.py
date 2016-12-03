@@ -103,11 +103,11 @@ def home(username):
         return render_template("index.html")
     q = session.query(Usuario).filter(Usuario.username == username)
 
-    return render_template("home.html")
+    return render_template("home.html", username = username)
 
 @app.route("/<string:username>/profile")
 def profile(username):
-    return render_template("profile.html")
+    return render_template("profile.html", username = username)
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
