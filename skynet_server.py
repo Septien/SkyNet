@@ -105,8 +105,8 @@ def home(username):
 
     return render_template("home.html")
 
-@app.route("/profile")
-def profile():
+@app.route("/<string:username>/profile")
+def profile(username):
     return render_template("profile.html")
 
 if __name__ == '__main__':
