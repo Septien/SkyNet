@@ -83,34 +83,30 @@
                   </div>
                 </div>
                 <div class="form-group">
+                    <form method='post' action="{{url_for('profile', username = username)}}">
                     <label for=" Email1msg">Share something:</label> 
-                    <textarea class="form-control" rows="4"></textarea>
+                    <textarea class="form-control" name='publish' rows="4"></textarea>
                     <br>
-                    <p><a class="btn btn-primary btn-md" href="#" role="button">Publish</a></p>
+                    <p><a class="btn btn-primary btn-md" role="submit">Publish</a></p>
+                    </form>
                 </div>
               </div>
 
+              {%for i in publicaciones%}
               <div id="profileContainer">
-
                     <div class="col-md-2">
                         <div class="thumbnail" >
-                            <img src="http://placehold.it/350x250" alt="...">
+                            <img src="{{ url_for('static', filename=i.img) }}" alt="...">
                         </div>
                     </div>
-                    
-                    <h3 class="info-post">Nombre del usuario</h3>
-                    <h4 class="info-post">Fecha</h4>
+                    <h3 class="info-post">{{i.name}}</h3>
+                    <h4 class="info-post">{{i.fecha}}</h4>
                     <div class="content-post">      
-                        <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                        </p>
-                     </div>     
+                        <p>{{i.text}}</p>
+                     </div>
               </div>
+              <br>
+              {% endfor %}
               <!-- pruebas de publicaciones manuales
               <div id="profileContainer">
 
