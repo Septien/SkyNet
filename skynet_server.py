@@ -47,7 +47,7 @@ def index():
         if not q:
             flash("User no registered or incorrect password")
             return render_template("index.html")
-        user = session.query(Usuario).filter(email == email).one()
+        user = session.query(Usuario).filter(Usuario.email == email).one()
         if password != user.contrasena:
             flash("User no registered or incorrect password")
             return render_template("index.html")
@@ -108,6 +108,24 @@ def home(username):
 @app.route("/<string:username>/profile")
 def profile(username):
     return render_template("profile.html", username = username)
+
+@app.route("/<string:username>/friend", methods = ['POST', 'GET'])
+def friend(username):
+    if request.method == 'POST':
+        name = request.form['user']
+        if not name:
+            flash("User not introduced")
+            return redirect(url_for("home", username = username))
+
+        likeName = "%" + name + "%"
+        q = session.query(exists().where(Usuario.username.like(likeName))).scalar()
+        if not q:
+            flash("User not found")
+            return render_template("home.html", username = username)
+    else:
+        return render_template("home.html", username = username)
+
+    
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
