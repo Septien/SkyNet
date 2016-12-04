@@ -2,7 +2,7 @@ import sys
 #Modulos necesarios para usar Flask
 from flask import Flask, render_template, url_for, request, redirect, flash, session
 #Modulos necesario para usar SQLAlchemy y base de datos
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, and_
 from sqlalchemy.sql import exists
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Usuario, Fotos, Publicacion, Amigos, Etiquetas, Chat, Mensaje
@@ -43,16 +43,19 @@ def index():
 
         #http://stackoverflow.com/questions/1676551/best-way-to-test-if-a-row-exists-in-a-mysql-table
         #http://stackoverflow.com/questions/7646173/sqlalchemy-exists-for-query
+        #Check if user exists
         q = session.query(exists().where(Usuario.email == email)).scalar()
         if not q:
             flash("User no registered or incorrect password")
             return render_template("index.html")
+        #Get user from database
         user = session.query(Usuario).filter(Usuario.email == email).one()
         if password != user.contrasena:
             flash("User no registered or incorrect password")
             return render_template("index.html")
         index = email.find('@')
         username = email[0: index]
+        #Update status of user
         user.conectado = True
         user.disponibilidad = True
         session.add(user)
@@ -107,7 +110,18 @@ def home(username):
 
 @app.route("/<string:username>/profile")
 def profile(username):
-    return render_template("profile.html", username = username)
+    #Get user from database
+    user = session.query(Usuario).filter(Usuario.username == username).one()
+    name = user.nombre + " " + user.apellido
+    #Get image
+    img = None
+    q = session.query(exists().where(and_(Fotos.uid == user.id, Fotos.profile == True))).scalar()
+    print q
+    if q:
+        picture = session.query(Fotos).filter(and_(Fotos.uid == user.id, Fotos.profile == True)).one()
+        img = picture.img_url
+        print img
+    return render_template("profile.html", username = username, filename = img, User = name)
 
 @app.route("/<string:username>/friend", methods = ['POST', 'GET'])
 def friend(username):
@@ -118,6 +132,7 @@ def friend(username):
             return redirect(url_for("home", username = username))
 
         likeName = "%" + name + "%"
+        #http://stackoverflow.com/questions/3325467/elixir-sqlalchemy-equivalent-to-sql-like-statement
         q = session.query(exists().where(Usuario.username.like(likeName))).scalar()
         if not q:
             flash("User not found")
