@@ -39,7 +39,7 @@ class Fotos(Base):
     usuario = relationship(Usuario)
 
     #The image
-    img = Column(BLOB)
+    img_url = Column(String(40))
     profile = Column(Boolean, default = False)
 
 #Tabla Publicacion
