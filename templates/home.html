@@ -32,19 +32,19 @@
                 <a>what's going on?</a>
               </li>
             </ul>
-            <form class="navbar-form navbar-left" action="POST" action="{{ url_for('friend', username = username) }}">
+            <form class="navbar-form navbar-left" method="POST" action="{{ url_for('friend', username = username) }}">
               <div class="form-group">
                 <input type="text" name="user" class="form-control" placeholder="Search">
-                {% with message = get_flashed_messages()%}
-                  {%if message%}
-                    <ul>
-                      <li><strong>{{message}}</strong></li>
-                    </ul>
-                  {%endif%}
-                {%endwith%}
-              </div>
               <button type="submit" class="btn btn-default">Submit</button>
+              {% with message = get_flashed_messages()%}
+                {%if message%}
+                  <ul class="alert alert-warning" role="alert">>
+                      <li><strong>{{message}}</strong></li>
+                  </ul>
+                {%endif%}
+              {%endwith%}
             </form>
+          </div>
             <ul class="nav navbar-nav navbar-right">
               <li><a href="#">Link</a></li>
               <li class="dropdown">
