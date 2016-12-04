@@ -108,20 +108,31 @@ def home(username):
 
     return render_template("home.html", username = username)
 
-@app.route("/<string:username>/profile")
+@app.route("/<string:username>/profile",methods = ['GET', 'POST'])
 def profile(username):
-    #Get user from database
-    user = session.query(Usuario).filter(Usuario.username == username).one()
-    name = user.nombre + " " + user.apellido
-    #Get image
-    img = None
-    q = session.query(exists().where(and_(Fotos.uid == user.id, Fotos.profile == True))).scalar()
-    print q
-    if q:
-        picture = session.query(Fotos).filter(and_(Fotos.uid == user.id, Fotos.profile == True)).one()
-        img = picture.img_url
-        print img
-    return render_template("profile.html", username = username, filename = img, User = name)
+    if request.method == 'POST':
+        #Get the text of the publication
+        publish = request.form['publish']
+        #Get the user from database
+        user = session.query(Usuario).filter(Usuario.username == username).one()
+        #Create a publication entry
+        publicacion = Publicacion(uid = user.id, texto = publish)
+        session.add(publicacion)
+        session.commit()
+        return redirect(url_for("profile.html", username = username))
+
+    else:
+        #Get user from database
+        user = session.query(Usuario).filter(Usuario.username == username).one()
+        name = user.nombre + " " + user.apellido
+        #Get image
+        img = None
+        q = session.query(exists().where(and_(Fotos.uid == user.id, Fotos.profile == True))).scalar()
+        print q
+        if q:
+            picture = session.query(Fotos).filter(and_(Fotos.uid == user.id, Fotos.profile == True)).one()
+            img = picture.img_url
+        return render_template("profile.html", username = username, filename = img, User = name, publicaciones = publicaciones)
 
 @app.route("/<string:username>/friend", methods = ['POST', 'GET'])
 def friend(username):
