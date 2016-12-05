@@ -104,9 +104,52 @@ def home(username):
     if not q:
         flash("User no registered")
         return render_template("index.html")
-    q = session.query(Usuario).filter(Usuario.username == username)
+    user = session.query(Usuario).filter(Usuario.username == username).one()
+    #Get image
+    img = None
+    q = session.query(exists().where(and_(Fotos.uid == user.id, Fotos.profile == True))).scalar()
+    if q:
+        picture = session.query(Fotos).filter(and_(Fotos.uid == user.id, Fotos.profile == True)).one()
+        img = picture.img_url
+    amigos = session.query(Amigos).filter(Amigos.uid == user.id).all()
+    #Get the user contacts
+    contactos = []
+    ids = []
+    for cont in amigos:
+        contacto = {}
+        ids.append(cont.amigo_id)
+        c = session.query(Usuario).filter(Usuario.id == cont.amigo_id).one()
+        contacto["name"] = c.nombre + " " + c.apellido
+        q = session.query(Fotos).filter(and_(Fotos.uid == c.id, Fotos.profile == True)).one()
+        contacto["img"] = q.img_url
+        contactos.append(contacto)
 
-    return render_template("home.html", username = username)
+    #Get the publications of the user and its contacts
+    publicaciones = []
+    #Get the user publications
+    pub = session.query(Publicacion).filter(Publicacion.uid == user.id).all()
+    for p in pub:
+        publicacion = {}
+        publicacion["img"] = img
+        publicacion["name"] = user.nombre + " " + user.apellido
+        publicacion["text"] = p.texto
+        publicacion["fecha"] = p.fecha
+        publicaciones.append(publicacion)
+    #Get the user contacts publications
+    for aid in ids:
+        c = session.query(Usuario).filter(Usuario.id == aid).one()
+        pub = session.query(Publicacion).filter(Publicacion.uid == aid).all()
+        for p in pub:
+            publicacion = {}
+            if q:
+                picture = session.query(Fotos).filter(and_(Fotos.uid == aid, Fotos.profile == True)).one()
+                publicacion["img"] = picture.img_url
+            publicacion["name"] = c.nombre + " " + c.apellido
+            publicacion["text"] = p.texto
+            publicacion["fecha"] = p.fecha
+            publicaciones.append(publicacion)
+
+    return render_template("home.html", username = username, contacts = contactos, publicaciones = publicaciones)
 
 @app.route("/<string:username>/profile",methods = ['GET', 'POST'])
 def profile(username):
@@ -128,7 +171,6 @@ def profile(username):
         #Get image
         img = None
         q = session.query(exists().where(and_(Fotos.uid == user.id, Fotos.profile == True))).scalar()
-        print q
         if q:
             picture = session.query(Fotos).filter(and_(Fotos.uid == user.id, Fotos.profile == True)).one()
             img = picture.img_url
