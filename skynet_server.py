@@ -210,6 +210,7 @@ def friend(username):
             flash("User not found")
             return render_template("home.html", username = username)
     else:
+        user = session.query(Usuario).filter(Usuario.username == username).one()
         if not user.conectado:
             return redirect(url_for("index"))
         return render_template("home.html", username = username)
@@ -226,6 +227,32 @@ def logout(username):
     session.commit()
     return redirect(url_for('index'))
 
+@app.route('/<string:username>/friend/<string:friend>')
+def contact(username, friend):
+    user = session.query(Usuario).filter(Usuario.username == username).one()
+    if not user.conectado:
+        return redirect(url_for("index"))
+    friend = session.query(Usuario).filter(Usuario.username == friend).one()
+    name = friend.nombre + " " + friend.apellido
+    #Get image
+    img = None
+    q = session.query(exists().where(and_(Fotos.uid == friend.id, Fotos.profile == True))).scalar()
+    if q:
+        picture = session.query(Fotos).filter(and_(Fotos.uid == friend.id, Fotos.profile == True)).one()
+        img = picture.img_url
+    #Get publication of user
+    q = session.query(exists().where(Publicacion.uid == friend.id)).scalar()
+    publicaciones = []
+    if q:
+        pub = session.query(Publicacion).filter(Publicacion.uid == friend.id).all()
+        for p in pub:
+            publicacion = {}
+            publicacion["img"] = img
+            publicacion["name"] = name
+            publicacion["text"] = p.texto
+            publicacion["fecha"] = p.fecha
+            publicaciones.append(publicacion)
+    return render_template("friend.html", username = username, filename = img, User = name, publicaciones = publicaciones)
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'

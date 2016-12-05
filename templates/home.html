@@ -72,7 +72,7 @@
             <img src="{{ url_for('static', filename = c.img) }}" alt="{{c.name}}" class="img-responsive img-circle" >
           </div>
           <div class="col-sm-9" id="textCnt">
-                  <a href="#" class="list-group-item" >{{c.name}}</a>
+                  <a href="{{ url_for('contact', username = username, friend = c.username) }}" class="list-group-item" >{{c.name}}</a>
           </div>
         </div>
         {% endfor %}
