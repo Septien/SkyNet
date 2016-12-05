@@ -124,6 +124,7 @@ def home(username):
         contacto["name"] = c.nombre + " " + c.apellido
         q = session.query(Fotos).filter(and_(Fotos.uid == c.id, Fotos.profile == True)).one()
         contacto["img"] = q.img_url
+        contacto["username"] = c.username
         contactos.append(contacto)
 
     #Get the publications of the user and its contacts
@@ -146,6 +147,8 @@ def home(username):
             if q:
                 picture = session.query(Fotos).filter(and_(Fotos.uid == aid, Fotos.profile == True)).one()
                 publicacion["img"] = picture.img_url
+            else:
+                publicacion["img"] = None
             publicacion["name"] = c.nombre + " " + c.apellido
             publicacion["text"] = p.texto
             publicacion["fecha"] = p.fecha
