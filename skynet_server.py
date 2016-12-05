@@ -105,6 +105,8 @@ def home(username):
         flash("User no registered")
         return render_template("index.html")
     user = session.query(Usuario).filter(Usuario.username == username).one()
+    if not user.conectado:
+        return redirect(url_for("index"))
     #Get image
     img = None
     q = session.query(exists().where(and_(Fotos.uid == user.id, Fotos.profile == True))).scalar()
@@ -167,6 +169,8 @@ def profile(username):
     else:
         #Get user from database
         user = session.query(Usuario).filter(Usuario.username == username).one()
+        if not user.conectado:
+            return redirect(url_for("index"))
         name = user.nombre + " " + user.apellido
         #Get image
         img = None
@@ -203,6 +207,8 @@ def friend(username):
             flash("User not found")
             return render_template("home.html", username = username)
     else:
+        if not user.conectado:
+            return redirect(url_for("index"))
         return render_template("home.html", username = username)
 
 
