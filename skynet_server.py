@@ -137,6 +137,8 @@ def home(username):
         publicacion["name"] = user.nombre + " " + user.apellido
         publicacion["text"] = p.texto
         publicacion["fecha"] = p.fecha
+        publicacion["username"] = user.username
+        publicacion["user"] = True
         publicaciones.append(publicacion)
     #Get the user contacts publications
     for aid in ids:
@@ -152,6 +154,8 @@ def home(username):
             publicacion["name"] = c.nombre + " " + c.apellido
             publicacion["text"] = p.texto
             publicacion["fecha"] = p.fecha
+            publicacion["username"] = c.username
+            publicacion["user"] = False
             publicaciones.append(publicacion)
 
     return render_template("home.html", username = username, contacts = contactos, publicaciones = publicaciones)
@@ -232,19 +236,19 @@ def contact(username, friend):
     user = session.query(Usuario).filter(Usuario.username == username).one()
     if not user.conectado:
         return redirect(url_for("index"))
-    friend = session.query(Usuario).filter(Usuario.username == friend).one()
-    name = friend.nombre + " " + friend.apellido
+    fri = session.query(Usuario).filter(Usuario.username == friend).one()
+    name = fri.nombre + " " + fri.apellido
     #Get image
     img = None
-    q = session.query(exists().where(and_(Fotos.uid == friend.id, Fotos.profile == True))).scalar()
+    q = session.query(exists().where(and_(Fotos.uid == fri.id, Fotos.profile == True))).scalar()
     if q:
-        picture = session.query(Fotos).filter(and_(Fotos.uid == friend.id, Fotos.profile == True)).one()
+        picture = session.query(Fotos).filter(and_(Fotos.uid == fri.id, Fotos.profile == True)).one()
         img = picture.img_url
     #Get publication of user
-    q = session.query(exists().where(Publicacion.uid == friend.id)).scalar()
+    q = session.query(exists().where(Publicacion.uid == fri.id)).scalar()
     publicaciones = []
     if q:
-        pub = session.query(Publicacion).filter(Publicacion.uid == friend.id).all()
+        pub = session.query(Publicacion).filter(Publicacion.uid == fri.id).all()
         for p in pub:
             publicacion = {}
             publicacion["img"] = img
@@ -252,7 +256,7 @@ def contact(username, friend):
             publicacion["text"] = p.texto
             publicacion["fecha"] = p.fecha
             publicaciones.append(publicacion)
-    return render_template("friend.html", username = username, filename = img, User = name, publicaciones = publicaciones)
+    return render_template("friend.html", username = username, friendname = friend, filename = img, User = name, publicaciones = publicaciones)
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
