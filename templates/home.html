@@ -86,8 +86,12 @@
                                 <img src="{{ url_for('static', filename = p.img) }}" alt="...">
                             </div>
             </div>
-
-            <h3 class="info-post">{{p.name}}</h3>
+            {%if p.user%}
+            <a href="{{ url_for('profile', username = username) }}">
+            {%else%}
+            <a href="{{ url_for('contact', username = username, friend = p.username) }}">
+            {%endif%}
+            <h3 class="info-post">{{p.name}}</h3></a>
             <h4 class="info-post">{{p.fecha}}</h4>
             <div class="content-post">
                             <p>{{p.text}}</p>
