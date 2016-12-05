@@ -66,51 +66,34 @@
      <div class="row">
     <div class="col-md-3">
         <h3>Contacts</h3>
-
+        {%for c in contacts%}
         <div class="block-contact" class="list-group">
           <div class="col-sm-3" id="imgCnt">
-            <img src="/images/cnt.jpg" alt="Scott Stevens" class="img-responsive img-circle" >
+            <img src="{{ url_for('static', filename = c.img) }}" alt="{{c.name}}" class="img-responsive img-circle" >
           </div>
           <div class="col-sm-9" id="textCnt">
-                  <a href="#" class="list-group-item" >Dapibus ac facilisis</a>
+                  <a href="#" class="list-group-item" >{{c.name}}</a>
           </div>
         </div>
-
-
-
-
-
-
+        {% endfor %}
     </div>
 
     <div class="col-md-6" >
+      {% for p in publicaciones %}
         <div id="profileContainer">
-
             <div class="col-md-2">
                             <div class="thumbnail" >
-                                <img src="/images/cnt.jpg" alt="...">
+                                <img src="{{ url_for('static', filename = p.img) }}" alt="...">
                             </div>
             </div>
 
-            <h3 class="info-post">Raul Jimenez</h3>
-            <h4 class="info-post">22/09/2016</h4>
+            <h3 class="info-post">{{p.name}}</h3>
+            <h4 class="info-post">{{p.fecha}}</h4>
             <div class="content-post">
-                            <p>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                            </p>
+                            <p>{{p.text}}</p>
             </div>
-
-
         </div>
-
-
-
-
+      {% endfor%}
     </div>
 
     <div class="col-md-3">
