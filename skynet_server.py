@@ -205,7 +205,18 @@ def friend(username):
     else:
         return render_template("home.html", username = username)
 
-    
+
+@app.route('/<string:username>/logout')
+def logout(username):
+    #Get user
+    user = session.query(Usuario).filter(Usuario.username == username).one()
+    #Update status of user
+    user.conectado = False
+    user.disponibilidad = False
+    session.add(user)
+    session.commit()
+    return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
