@@ -1,3 +1,7 @@
 .vagrant/
 *.db
 *.pyc
+env/
+venv/
+*.jpg
+script.py
