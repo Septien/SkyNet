@@ -27,7 +27,7 @@
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
               <li ><a href="{{ url_for('profile', username = username) }}">Profile <span class="sr-only">(current)</span></a></li>
-              <li class="active"><a href="home">HOME</a></li>
+              <li><a href="home">HOME</a></li>
               <li>
                 <a>what's going on?</a>
               </li>
@@ -65,24 +65,25 @@
       <div class="container">
 		<div class="row">
 		<div class="col-md-3">
-
+		<br>
 		</div>
         </div>
     </div>
 
     <div class="col-md-6" >
-      {% for u in usuarios %}
+        {% for u in usuarios %}
         <div id="profileContainer">
             <div class="col-md-2">
-                            <div class="thumbnail" >
-                                <img src="{{ url_for('static', filename = u.img) }}" alt="...">
-                            </div>
+	            <div class="thumbnail" >
+	                <img src="{{ url_for('static', filename = u.img) }}" alt="...">
+	            </div>
             </div>
             <a href="{{ url_for('contact', username = username, friend = u.username) }}">
-            <h3 class="info-post">{{p.name}}</h3></a>
+            <h3 class="info-post">{{u.name}}</h3></a>
             </div>
+            <br>
+    	{% endfor%}
         </div>
-      {% endfor%}
     </div>
 
   </body>
