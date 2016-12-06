@@ -36,7 +36,7 @@
               <div class="form-group">
                 <input type="text" name="user" class="form-control" placeholder="Search">
               <button type="submit" class="btn btn-default">Submit</button>
-              {% with message = get_flashed_messages()%}
+              {% with message = get_flashed_messages(category_filter=["search"])%}
                 {%if message%}
                   <ul class="alert alert-warning" role="alert">>
                       <li><strong>{{message}}</strong></li>
@@ -98,7 +98,15 @@
                     <label for=" Email1msg">Share something:</label> 
                     <textarea class="form-control" name='publish' rows="4"></textarea>
                     <br>
-                    <p><a class="btn btn-primary btn-md" role="submit">Publish</a></p>
+                    <p><!--<a class="btn btn-primary btn-md" role="submit">Publish</a>-->
+                    <input class="btn btn-primary btn-md" type="submit"></button>
+                    {% with message = get_flashed_messages(category_filter=["publish"])%}
+                    {%if message%}
+                      <ul class="alert alert-warning" role="alert">>
+                          <li><strong>{{message}}</strong></li>
+                      </ul>
+                    {%endif%}
+                  {%endwith%}</p>
                     </form>
                 </div>
               </div>

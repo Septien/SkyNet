@@ -166,6 +166,9 @@ def profile(username):
     if request.method == 'POST':
         #Get the text of the publication
         publish = request.form['publish']
+        if not publish:
+            flash('No text added', "publish")
+            return redirect(url_for("profile", username = username))
         #Get the user from database
         user = session.query(Usuario).filter(Usuario.username == username).one()
         #Create a publication entry
