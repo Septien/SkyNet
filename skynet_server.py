@@ -130,7 +130,7 @@ def home(username):
     #Get the publications of the user and its contacts
     publicaciones = []
     #Get the user publications
-    pub = session.query(Publicacion).filter(Publicacion.uid == user.id).all()
+    pub = session.query(Publicacion).filter(Publicacion.uid == user.id).order_by(Publicacion.fecha.desc()).all()
     for p in pub:
         publicacion = {}
         publicacion["img"] = img
@@ -143,7 +143,7 @@ def home(username):
     #Get the user contacts publications
     for aid in ids:
         c = session.query(Usuario).filter(Usuario.id == aid).one()
-        pub = session.query(Publicacion).filter(Publicacion.uid == aid).all()
+        pub = session.query(Publicacion).filter(Publicacion.uid == aid).order_by(Publicacion.fecha.desc()).all()
         for p in pub:
             publicacion = {}
             q = session.query(exists().where(and_(Fotos.uid == aid, Fotos.profile == True))).scalar()
@@ -193,7 +193,7 @@ def profile(username):
         q = session.query(exists().where(Publicacion.uid == user.id)).scalar()
         publicaciones = []
         if q:
-            pub = session.query(Publicacion).filter(Publicacion.uid == user.id).all()
+            pub = session.query(Publicacion).filter(Publicacion.uid == user.id).order_by(Publicacion.fecha.desc()).all()
             for p in pub:
                 publicacion = {}
                 publicacion["img"] = img
