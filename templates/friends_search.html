@@ -75,7 +75,11 @@
         <div id="profileContainer">
             <div class="col-md-2">
 	            <div class="thumbnail" >
-	                <img src="{{ url_for('static', filename = u.img) }}" alt="...">
+	            {%if u.img%}
+                  <img src="{{ url_for('static', filename = u.img) }}" alt="...">
+              {%else%}
+                  <img src="" alt="...">
+              {%endif%}
 	            </div>
             </div>
             <a href="{{ url_for('contact', username = username, friend = u.username) }}">

@@ -115,7 +115,11 @@
               <div id="profileContainer">
                     <div class="col-md-2">
                         <div class="thumbnail" >
+                        {%if i.img%}
                             <img src="{{ url_for('static', filename=i.img) }}" alt="...">
+                        {%else%}
+                            <img src="" alt="...">
+                        {%endif%}
                         </div>
                     </div>
                     <h3 class="info-post">{{i.name}}</h3>

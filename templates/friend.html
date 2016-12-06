@@ -66,7 +66,11 @@
      <div class="row">
       <div class="col-sm-6 col-md-4">
         <div class="thumbnail">
-          <img src="{{ url_for('static', filename=filename) }}" alt="...">
+          {%if filename%}
+              <img src="{{ url_for('static', filename=filename) }}" alt="...">
+          {%else%}
+              <img src="" alt="...">
+          {%endif%}
           <div class="caption">
             <h3>{{User}}</h3>
           </div>
@@ -105,7 +109,11 @@
               <div id="profileContainer">
                     <div class="col-md-2">
                         <div class="thumbnail" >
-                            <img src="{{ url_for('static', filename=i.img) }}" alt="...">
+                        {%if filename%}
+                          <img src="{{ url_for('static', filename=i.img) }}" alt="...">
+                      {%else%}
+                          <img src="" alt="...">
+                      {%endif%}
                         </div>
                     </div>
                     <h3 class="info-post">{{i.name}}</h3>
