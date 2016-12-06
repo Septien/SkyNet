@@ -86,9 +86,13 @@
       {% for p in publicaciones %}
         <div id="profileContainer">
             <div class="col-md-2">
-                            <div class="thumbnail" >
-                                <img src="{{ url_for('static', filename = p.img) }}" alt="...">
-                            </div>
+              <div class="thumbnail" >
+                {%if p.img%}
+                  <img src="{{ url_for('static', filename=p.img) }}" alt="...">
+              {%else%}
+                  <img src="" alt="...">
+              {%endif%}
+              </div>
             </div>
             {%if p.user%}
             <a href="{{ url_for('profile', username = username) }}">
@@ -98,7 +102,7 @@
             <h3 class="info-post">{{p.name}}</h3></a>
             <h4 class="info-post">{{p.fecha}}</h4>
             <div class="content-post">
-                            <p>{{p.text}}</p>
+              <p>{{p.text}}</p>
             </div>
         </div>
       {% endfor%}
