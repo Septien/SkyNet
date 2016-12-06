@@ -2,7 +2,7 @@ import sys
 #Modulos necesarios para usar Flask
 from flask import Flask, render_template, url_for, request, redirect, flash, session
 #Modulos necesario para usar SQLAlchemy y base de datos
-from sqlalchemy import create_engine, text, and_
+from sqlalchemy import create_engine, text, and_, or_
 from sqlalchemy.sql import exists
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Usuario, Fotos, Publicacion, Amigos, Etiquetas, Chat, Mensaje
@@ -146,6 +146,7 @@ def home(username):
         pub = session.query(Publicacion).filter(Publicacion.uid == aid).all()
         for p in pub:
             publicacion = {}
+            q = session.query(exists().where(and_(Fotos.uid == aid, Fotos.profile == True))).scalar()
             if q:
                 picture = session.query(Fotos).filter(and_(Fotos.uid == aid, Fotos.profile == True)).one()
                 publicacion["img"] = picture.img_url
@@ -209,10 +210,28 @@ def friend(username):
 
         likeName = "%" + name + "%"
         #http://stackoverflow.com/questions/3325467/elixir-sqlalchemy-equivalent-to-sql-like-statement
-        q = session.query(exists().where(Usuario.username.like(likeName))).scalar()
+        q = session.query(exists().where( or_(or_(Usuario.username.like(likeName), \
+                          Usuario.nombre.like(likeName)), Usuario.apellido.like(likeName)) ) ).scalar()
         if not q:
             flash("User not found")
             return render_template("home.html", username = username)
+        friends = session.query(Usuario).filter(Usuario.username.like(likeName)).all()
+        users = []
+        for f in friends:
+            user = {}
+            print f.username
+            if f.username != username:
+                user["name"] = f.nombre + " " + f.apellido
+                user["username"] = f.username
+                q = session.query(exists().where(and_(Fotos.uid == f.id, Fotos.profile == True))).scalar()
+                if q:
+                    picture = session.query(Fotos).filter(and_(Fotos.uid == f.id, Fotos.profile == True)).one()
+                    user["img"] = picture.img_url
+                else:
+                    user["img"] = None
+                users.append(user)
+        return render_template("friends_search.html", username = username, usuarios = users)
+
     else:
         user = session.query(Usuario).filter(Usuario.username == username).one()
         if not user.conectado:
