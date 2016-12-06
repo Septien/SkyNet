@@ -172,7 +172,7 @@ def profile(username):
         publicacion = Publicacion(uid = user.id, texto = publish)
         session.add(publicacion)
         session.commit()
-        return redirect(url_for("profile.html", username = username))
+        return redirect(url_for("profile", username = username))
 
     else:
         #Get user from database
@@ -219,7 +219,6 @@ def friend(username):
         users = []
         for f in friends:
             user = {}
-            print f.username
             if f.username != username:
                 user["name"] = f.nombre + " " + f.apellido
                 user["username"] = f.username
