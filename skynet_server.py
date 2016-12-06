@@ -218,7 +218,8 @@ def friend(username):
         if not q:
             flash("User not found")
             return render_template("home.html", username = username)
-        friends = session.query(Usuario).filter(Usuario.username.like(likeName)).all()
+        friends = session.query(Usuario).filter( or_(or_(Usuario.username.like(likeName), \
+                          Usuario.nombre.like(likeName)), Usuario.apellido.like(likeName))).all()
         users = []
         for f in friends:
             user = {}
