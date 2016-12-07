@@ -1,12 +1,11 @@
 """
 	Suit of tests for server of the SkyNet social network.
 """
-
-
 import os
 import sys
 import unittest
 import flask
+import flask_testing
 
 import skynet_server as ss
 #Modulos necesario para usar SQLAlchemy y base de datos
@@ -25,7 +24,6 @@ class SkynetTestCase(unittest.TestCase):
 		Base.metadata.bind = engine
 		#Crear sesion para comunicarse con la base de datos
 		self.DBSession = sessionmaker(bind = engine)
-		
 
 	def tearDown(self):
 		pass
@@ -194,6 +192,23 @@ class SkynetTestCase(unittest.TestCase):
 		assert p["user"] == False
 		assert p["img"] == None
 
+	def test_home(self):
+		"""
+		Test the method home. Only accepts the GET method.
+			-If the user does not exits on database, it should indicate it.
+			-If the user is not connected, it should return to the index page.
+		"""
+		rv = self.app.get("/juan/home")
+		assert "User not registered" in rv.data
+
+		rv = self.app.get("/sakura/home", follow_redirects = True)
+		assert "Username" in rv.data
+		assert "Password" in rv.data
+		assert "Login" in rv.data
+
+		rv = self.app.get("/johns/home")
+		assert "johns" in rv.data
+		
 
 if __name__ == '__main__':
 	unittest.main()
