@@ -6,6 +6,7 @@
 import os
 import sys
 import unittest
+import flask
 
 import skynet_server
 #Modulos necesario para usar SQLAlchemy y base de datos
@@ -14,19 +15,17 @@ from sqlalchemy.sql import exists
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Usuario, Fotos, Publicacion, Amigos, Etiquetas, Chat, Mensaje
 
-engine = create_engine("mysql+pymysql://root:12345@localhost/")
-engine.execute("USE skynet")
-Base.metadata.bind = engine
-
-#Crear sesion para comunicarse con la base de datos
-DBSession = sessionmaker(bind = engine)
-
 class SkynetTestCase(unittest.TestCase):
 	def setUp(self):
 		skynet_server.app.config['TESTING'] = True
 		self.app = skynet_server.app.test_client()
 		self.app.secret_key = 'super_secret_key'
-		self.session = DBSession()
+		engine = create_engine("mysql+pymysql://root:12345@localhost/")
+		engine.execute("USE skynet")
+		Base.metadata.bind = engine
+		#Crear sesion para comunicarse con la base de datos
+		self.DBSession = sessionmaker(bind = engine)
+		
 
 	def tearDown(self):
 		pass
@@ -46,6 +45,7 @@ class SkynetTestCase(unittest.TestCase):
 			-If all went fine, check that the status of the user is correctly updated on the data base and the 
 			returned template is the adecuate.
 		"""
+		session = self.DBSession()
 		#Tests for GET method
 		rv = self.app.get("/")
 		assert "Username" in rv.data
@@ -71,14 +71,15 @@ class SkynetTestCase(unittest.TestCase):
 
 		rv = self.login("johns@correo.com", "12345", "/")
 		#Get the user from the database
-		user = self.session.query(Usuario).filter(Usuario.email == "johns@correo.com").one()
+		user = session.query(Usuario).filter(Usuario.email == "johns@correo.com").one()
 		assert user.conectado == True
 		assert user.disponibilidad == True
 		#Test correct redirect
-		assert "John Snow" in rv.data
+		assert "johns" in rv.data
 
 	def test_register(self):
 		pass
+
 
 if __name__ == '__main__':
 	unittest.main()
