@@ -149,7 +149,7 @@ def getPublicaciones(uid, u):
 def home(username):
     q = session.query(exists().where(Usuario.username == username)).scalar()
     if not q:
-        flash("User no registered")
+        flash("User not registered")
         return render_template("index.html")
     user = session.query(Usuario).filter(Usuario.username == username).one()
     if not user.conectado:
