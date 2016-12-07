@@ -31,14 +31,14 @@ class SkynetTestCase(unittest.TestCase):
 	def tearDown(self):
 		pass
 
-		def login(self, email, password, route):
+	def login(self, email, password, route):
 		"""For testing the log in"""
 		return self.app.post(route, data = dict(email = email, password = password), follow_redirects = True)
 
 	def test_index(self):
 		"""
 		Test the method index. If the method of the request is GET, just verify that the returned HTML
-		is correctly formatted. Check if the string 'SKYNET' is present in the file.
+		is correctly formatted. Check if the strings 'Username', 'Password' and 'Login' are present in the file.
 		If the methos is POST, there are many things to verify:
 			-If there is no password or email on the request form, indicate that a field is missing.
 			-If the format of the email is incorrect, indicate to the user that email format is wrong
@@ -48,9 +48,13 @@ class SkynetTestCase(unittest.TestCase):
 		"""
 		#Tests for GET method
 		rv = self.app.get("/")
-		assert "SKYNET" in rv.data
+		assert "Username" in rv.data
+		assert "Password" in rv.data
+		assert "Login" in rv.data
 		rv = self.app.get("/index")
-		assert "SKYNET" in rv.data
+		assert "Username" in rv.data
+		assert "Password" in rv.data
+		assert "Login" in rv.data
 
 		#Tests for POST method
 		#Testing log in
@@ -72,6 +76,9 @@ class SkynetTestCase(unittest.TestCase):
 		assert user.disponibilidad == True
 		#Test correct redirect
 		assert "John Snow" in rv.data
+
+	def test_register(self):
+		pass
 
 if __name__ == '__main__':
 	unittest.main()
