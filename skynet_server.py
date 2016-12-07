@@ -108,6 +108,24 @@ def getImage(uid, profile):
         img = picture.img_url
     return img
 
+def getContactos(uid):
+    """
+    Get the contacts of the user
+    """
+    amigos = session.query(Amigos).filter(Amigos.uid == uid).all()
+    contactos = []
+    ids = []
+    for cont in amigos:
+        contacto = {}
+        ids.append(cont.amigo_id)
+        c = session.query(Usuario).filter(Usuario.id == cont.amigo_id).one()
+        contacto["name"] = c.nombre + " " + c.apellido
+        img = getImage(c.id, True)
+        contacto["img"] = img
+        contacto["username"] = c.username
+        contactos.append(contacto)
+    return (contactos, ids)
+
 #/<string:username>, username
 @app.route("/<string:username>/home")
 def home(username):
@@ -122,18 +140,7 @@ def home(username):
     img = getImage(user.id, True)
     amigos = session.query(Amigos).filter(Amigos.uid == user.id).all()
     #Get the user contacts
-    contactos = []
-    ids = []
-    for cont in amigos:
-        contacto = {}
-        ids.append(cont.amigo_id)
-        c = session.query(Usuario).filter(Usuario.id == cont.amigo_id).one()
-        contacto["name"] = c.nombre + " " + c.apellido
-        q = session.query(Fotos).filter(and_(Fotos.uid == c.id, Fotos.profile == True)).one()
-        contacto["img"] = q.img_url
-        contacto["username"] = c.username
-        contactos.append(contacto)
-
+    (contactos, ids) = getContactos(user.id)
 
     #Get the publications of the user and its contacts
     publicaciones = []
