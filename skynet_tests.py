@@ -192,6 +192,9 @@ class SkynetTestCase(unittest.TestCase):
 		assert p["user"] == False
 		assert p["img"] == None
 
+		publicaciones = ss.getPublicaciones(12, True)
+		assert publicaciones == None
+
 	def test_home(self):
 		"""
 		Test the method home. Only accepts the GET method.
