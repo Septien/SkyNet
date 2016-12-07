@@ -91,7 +91,8 @@ def register():
 
         index = email.find('@')
         username = email[0: index]
-        newUser = Usuario(nombre = name, apellido = lastname, email = email, contrasena = pwd, username = username)
+        newUser = Usuario(nombre = name, apellido = lastname, email = email, contrasena = pwd, username = username, \
+            conectado = True, disponibilidad = True)
         session.add(newUser)
         session.commit()
         return redirect(url_for("home", username = username))
