@@ -120,8 +120,7 @@ def getContactos(uid):
         ids.append(cont.amigo_id)
         c = session.query(Usuario).filter(Usuario.id == cont.amigo_id).one()
         contacto["name"] = c.nombre + " " + c.apellido
-        img = getImage(c.id, True)
-        contacto["img"] = img
+        contacto["img"] = getImage(c.id, True)
         contacto["username"] = c.username
         contactos.append(contacto)
     return (contactos, ids)
@@ -155,43 +154,17 @@ def home(username):
     user = session.query(Usuario).filter(Usuario.username == username).one()
     if not user.conectado:
         return redirect(url_for("index"))
-    #Get image
-    img = getImage(user.id, True)
-    amigos = session.query(Amigos).filter(Amigos.uid == user.id).all()
+
     #Get the user contacts
     (contactos, ids) = getContactos(user.id)
 
     #Get the publications of the user and its contacts
-    publicaciones = []
     #Get the user publications
-    pub = session.query(Publicacion).filter(Publicacion.uid == user.id).order_by(Publicacion.fecha.desc()).all()
-    for p in pub:
-        publicacion = {}
-        publicacion["img"] = img
-        publicacion["name"] = user.nombre + " " + user.apellido
-        publicacion["text"] = p.texto
-        publicacion["fecha"] = p.fecha
-        publicacion["username"] = user.username
-        publicacion["user"] = True
-        publicaciones.append(publicacion)
+    publicaciones = getPublicaciones(user.id, True)
     #Get the user contacts publications
     for aid in ids:
-        c = session.query(Usuario).filter(Usuario.id == aid).one()
-        pub = session.query(Publicacion).filter(Publicacion.uid == aid).order_by(Publicacion.fecha.desc()).all()
-        for p in pub:
-            publicacion = {}
-            q = session.query(exists().where(and_(Fotos.uid == aid, Fotos.profile == True))).scalar()
-            if q:
-                picture = session.query(Fotos).filter(and_(Fotos.uid == aid, Fotos.profile == True)).one()
-                publicacion["img"] = picture.img_url
-            else:
-                publicacion["img"] = None
-            publicacion["name"] = c.nombre + " " + c.apellido
-            publicacion["text"] = p.texto
-            publicacion["fecha"] = p.fecha
-            publicacion["username"] = c.username
-            publicacion["user"] = False
-            publicaciones.append(publicacion)
+        p = getPublicaciones(aid, False)
+        publicaciones.append(p)
 
     return render_template("home.html", username = username, contacts = contactos, publicaciones = publicaciones)
 
