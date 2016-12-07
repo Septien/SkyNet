@@ -146,6 +146,29 @@ class SkynetTestCase(unittest.TestCase):
 		img = ss.getImage(1, True)
 		assert img == 'public/images/cnt.jpg'
 
+	def test_getContactos(self):
+		"""
+		Test the function getContactos. Should return their information and ids.
+		"""
+		(contactos, ids) = ss.getContactos(1)
+		assert ids[0] == 2
+		assert ids[1] == 3
+		assert ids[2] == 4
+		
+		cont = contactos[0]
+		assert cont["name"] == 'John Snow'
+		assert cont["img"] == 'public/images/cnt3.jpg'
+		assert cont["username"] == 'johns'
+
+		cont = contactos[1]
+		assert cont["name"] == 'Sakura Card Captor'
+		assert cont["img"] == 'public/images/cnt1.jpg'
+		assert cont["username"] == 'sakura'
+
+		cont = contactos[2]
+		assert cont["name"] == 'Sofia Fiorelli'
+		assert cont["img"] == 'public/images/cnt034.jpg'
+		assert cont["username"] == 'sfiorelli'
 
 if __name__ == '__main__':
 	unittest.main()
