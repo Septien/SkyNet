@@ -126,6 +126,25 @@ def getContactos(uid):
         contactos.append(contacto)
     return (contactos, ids)
 
+def getPublicaciones(uid, u):
+    """
+    Get the publications corresponding to the user with id: uid.
+    u: boolean variable that indicates if the uid correspond to the logged user.
+    """
+    publicaciones = []
+    user = session.query(Usuario).filter(Usuario.id == uid).one()
+    pub = session.query(Publicacion).filter(Publicacion.uid == uid).order_by(Publicacion.fecha.desc()).all()
+    for p in pub:
+        publicacion = {}
+        publicacion["img"] = getImage(uid, True)
+        publicacion["name"] = user.nombre + " " + user.apellido
+        publicacion["text"] = p.texto
+        publicacion["fecha"] = p.fecha
+        publicacion["username"] = user.username
+        publicacion["user"] = u
+        publicaciones.append(publicacion)
+    return publicaciones
+
 #/<string:username>, username
 @app.route("/<string:username>/home")
 def home(username):
