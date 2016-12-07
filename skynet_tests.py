@@ -211,7 +211,21 @@ class SkynetTestCase(unittest.TestCase):
 
 		rv = self.app.get("/johns/home")
 		assert "johns" in rv.data
-		
+
+	def test_profile(self):
+		"""
+		Test the method profile. Accepts methods GET and POST.
+		If the method is GET, check if the user is connected. If it is, return the profile template.
+		If not, redirect to the index page.
+		"""
+		rv = self.app.get("/sakura/profile", follow_redirects = True)
+		assert "Username" in rv.data
+		assert "Password" in rv.data
+		assert "Login" in rv.data
+
+		rv = self.app.get("/johns/profile")
+		assert "John Snow" in rv.data
+		assert "johns" in rv.data
 
 if __name__ == '__main__':
 	unittest.main()
