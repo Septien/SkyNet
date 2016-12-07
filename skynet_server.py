@@ -132,6 +132,9 @@ def getPublicaciones(uid, u):
     """
     publicaciones = []
     user = session.query(Usuario).filter(Usuario.id == uid).one()
+    q = session.query(exists().where(Publicacion.uid == user.id)).scalar()
+    if not q:
+        return None
     pub = session.query(Publicacion).filter(Publicacion.uid == uid).order_by(Publicacion.fecha.desc()).all()
     for p in pub:
         publicacion = {}
@@ -191,11 +194,7 @@ def profile(username):
             return redirect(url_for("index"))
         name = user.nombre + " " + user.apellido
         #Get image
-        img = None
-        q = session.query(exists().where(and_(Fotos.uid == user.id, Fotos.profile == True))).scalar()
-        if q:
-            picture = session.query(Fotos).filter(and_(Fotos.uid == user.id, Fotos.profile == True)).one()
-            img = picture.img_url
+        img = getImage(user.id, True)
         #Get publication of user
         q = session.query(exists().where(Publicacion.uid == user.id)).scalar()
         publicaciones = []
