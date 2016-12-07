@@ -8,7 +8,7 @@ import sys
 import unittest
 import flask
 
-import skynet_server
+import skynet_server as ss
 #Modulos necesario para usar SQLAlchemy y base de datos
 from sqlalchemy import create_engine, text, and_, or_
 from sqlalchemy.sql import exists
@@ -17,8 +17,8 @@ from database_setup import Base, Usuario, Fotos, Publicacion, Amigos, Etiquetas,
 
 class SkynetTestCase(unittest.TestCase):
 	def setUp(self):
-		skynet_server.app.config['TESTING'] = True
-		self.app = skynet_server.app.test_client()
+		ss.app.config['TESTING'] = True
+		self.app = ss.app.test_client()
 		self.app.secret_key = 'super_secret_key'
 		engine = create_engine("mysql+pymysql://root:12345@localhost/")
 		engine.execute("USE skynet")
@@ -136,6 +136,17 @@ class SkynetTestCase(unittest.TestCase):
 		assert user.conectado == True
 		assert user.disponibilidad == True
 
+	def test_getImage(self):
+		"""
+		Test the function getImage. If the user has no image, returns None. Otherwise returns the url for it.
+		"""
+		#Get the image of user 5 (Jose Septien)
+		img = ss.getImage(5, True)
+		assert img == None
+		img = ss.getImage(1, True)
+		assert img == 'public/images/cnt.jpg'
+
 
 if __name__ == '__main__':
 	unittest.main()
+
