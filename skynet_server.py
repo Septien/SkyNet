@@ -99,6 +99,15 @@ def register():
     else:
         return render_template("register.html")
 
+def getImage(uid, profile):
+    """Get the image asociated with the user. profile: indicate if the image is the profile one"""
+    img = None
+    q = session.query(exists().where(and_(Fotos.uid == uid, Fotos.profile == True))).scalar()
+    if q:
+        picture = session.query(Fotos).filter(and_(Fotos.uid == uid, Fotos.profile == profile)).one()
+        img = picture.img_url
+    return img
+
 #/<string:username>, username
 @app.route("/<string:username>/home")
 def home(username):
@@ -110,11 +119,7 @@ def home(username):
     if not user.conectado:
         return redirect(url_for("index"))
     #Get image
-    img = None
-    q = session.query(exists().where(and_(Fotos.uid == user.id, Fotos.profile == True))).scalar()
-    if q:
-        picture = session.query(Fotos).filter(and_(Fotos.uid == user.id, Fotos.profile == True)).one()
-        img = picture.img_url
+    img = getImage(user.id, True)
     amigos = session.query(Amigos).filter(Amigos.uid == user.id).all()
     #Get the user contacts
     contactos = []
@@ -128,6 +133,7 @@ def home(username):
         contacto["img"] = q.img_url
         contacto["username"] = c.username
         contactos.append(contacto)
+
 
     #Get the publications of the user and its contacts
     publicaciones = []
