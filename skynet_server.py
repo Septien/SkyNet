@@ -86,7 +86,7 @@ def register():
         #Check if user not already exists
         q = session.query(exists().where(Usuario.email == email)).scalar()
         if q:
-            flash("User already redister")
+            flash("User already register")
             return render_template("register.html")
 
         index = email.find('@')
