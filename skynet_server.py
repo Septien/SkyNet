@@ -196,17 +196,7 @@ def profile(username):
         #Get image
         img = getImage(user.id, True)
         #Get publication of user
-        q = session.query(exists().where(Publicacion.uid == user.id)).scalar()
-        publicaciones = []
-        if q:
-            pub = session.query(Publicacion).filter(Publicacion.uid == user.id).order_by(Publicacion.fecha.desc()).all()
-            for p in pub:
-                publicacion = {}
-                publicacion["img"] = img
-                publicacion["name"] = name
-                publicacion["text"] = p.texto
-                publicacion["fecha"] = p.fecha
-                publicaciones.append(publicacion)
+        publicaciones = getPublicaciones(user.id, True)
         return render_template("profile.html", username = username, filename = img, User = name, publicaciones = publicaciones)
 
 @app.route("/<string:username>/friend", methods = ['POST', 'GET'])
