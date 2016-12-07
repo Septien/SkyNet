@@ -24,6 +24,7 @@ session = DBSession()
 
 #Inicializa la app de Flask
 app = Flask(__name__)
+app.secret_key = 'super_secret_key'
 
 @app.route("/", methods = ['POST', 'GET'])
 @app.route("/index", methods = ['POST', 'GET'])
@@ -46,12 +47,12 @@ def index():
         #Check if user exists
         q = session.query(exists().where(Usuario.email == email)).scalar()
         if not q:
-            flash("User no registered or incorrect password")
+            flash("User not registered or incorrect password")
             return render_template("index.html")
         #Get user from database
         user = session.query(Usuario).filter(Usuario.email == email).one()
         if password != user.contrasena:
-            flash("User no registered or incorrect password")
+            flash("User not registered or incorrect password")
             return render_template("index.html")
         index = email.find('@')
         username = email[0: index]
