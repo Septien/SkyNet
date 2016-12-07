@@ -170,6 +170,31 @@ class SkynetTestCase(unittest.TestCase):
 		assert cont["img"] == 'public/images/cnt034.jpg'
 		assert cont["username"] == 'sfiorelli'
 
+	def test_getPublicaciones(self):
+		"""
+		Test the function getPublicaciones. Should return image of the user, name, text, date, username and idicate if
+		the publication correspond to the main user.
+		"""
+		publicaciones = ss.getPublicaciones(5, True)
+
+		p = publicaciones[0]
+		assert p["name"] == "Jose Septien"
+		assert p["text"] == "Hola a todos!"
+		assert str(p["fecha"]) == "2016-12-06 15:04:21"
+		assert p["username"] == "jaseptienh"
+		assert p["user"] == True
+		assert p["img"] == None
+
+		publicaciones = ss.getPublicaciones(5, False)
+		p = publicaciones[0]
+		assert p["name"] == "Jose Septien"
+		assert p["text"] == "Hola a todos!"
+		assert str(p["fecha"]) == "2016-12-06 15:04:21"
+		assert p["username"] == "jaseptienh"
+		assert p["user"] == False
+		assert p["img"] == None
+
+
 if __name__ == '__main__':
 	unittest.main()
 
