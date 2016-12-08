@@ -83,11 +83,12 @@
     </div>
 
     <div class="col-md-6" >
+      {%if publicaciones%}
       {% for p in publicaciones %}
         <div id="profileContainer">
             <div class="col-md-2">
               <div class="thumbnail" >
-                {%if p.img%}
+              {%if p.img%}
                   <img src="{{ url_for('static', filename=p.img) }}" alt="...">
               {%else%}
                   <img src="" alt="...">
@@ -106,6 +107,7 @@
             </div>
         </div>
       {% endfor%}
+      {%endif%}
     </div>
 
     <div class="col-md-3">
