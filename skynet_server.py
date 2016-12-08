@@ -256,6 +256,11 @@ def contact(username, friend):
     user = session.query(Usuario).filter(Usuario.username == username).one()
     if not user.conectado:
         return redirect(url_for("index"))
+    q = session.query(exists().where(Usuario.username == friend)).scalar()
+    if not q:
+        flash("Friend not existing")
+        return redirect(url_for("home", username = username))
+
     fri = session.query(Usuario).filter(Usuario.username == friend).one()
     name = fri.nombre + " " + fri.apellido
     #Get image
