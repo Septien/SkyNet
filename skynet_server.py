@@ -174,6 +174,9 @@ def home(username):
 @app.route("/<string:username>/profile",methods = ['GET', 'POST'])
 def profile(username):
     if request.method == 'POST':
+        user = session.query(Usuario).filter(Usuario.username == username).one()
+        if not user.conectado:
+            return redirect(url_for("index"))
         #Get the text of the publication
         publish = request.form['publish']
         if not publish:
@@ -202,6 +205,10 @@ def profile(username):
 @app.route("/<string:username>/friend", methods = ['POST', 'GET'])
 def friend(username):
     if request.method == 'POST':
+        user = session.query(Usuario).filter(Usuario.username == username).one()
+        if not user.conectado:
+            return redirect(url_for("index"))
+
         name = request.form['user']
         if not name:
             flash("User not introduced")
@@ -222,12 +229,7 @@ def friend(username):
             if f.username != username:
                 user["name"] = f.nombre + " " + f.apellido
                 user["username"] = f.username
-                q = session.query(exists().where(and_(Fotos.uid == f.id, Fotos.profile == True))).scalar()
-                if q:
-                    picture = session.query(Fotos).filter(and_(Fotos.uid == f.id, Fotos.profile == True)).one()
-                    user["img"] = picture.img_url
-                else:
-                    user["img"] = None
+                user["img"] = getImage(f.id, True)
                 users.append(user)
         return render_template("friends_search.html", username = username, usuarios = users)
 
