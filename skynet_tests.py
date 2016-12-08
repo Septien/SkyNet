@@ -274,5 +274,21 @@ class SkynetTestCase(unittest.TestCase):
 		assert "Sakura Card Captor" in rv.data
 		assert "Sofia Fiorelli" in rv.data
 
+	def test_contact(self):
+		"""
+		Function to test the method contact. Accept only GET method.
+		"""
+		rv = self.app.get("/sakura/friend/johns", follow_redirects = True)
+		assert "Username" in rv.data
+		assert "Password" in rv.data
+		assert "Login" in rv.data
+
+		rv = self.app.get("/johns/friend/pikachu", follow_redirects = True)
+		assert "Friend not existing" in rv.data
+
+		rv = self.app.get("/johns/friend/sakura", follow_redirects = True)
+		assert "Sakura Card Captor" in rv.data
+
+
 if __name__ == '__main__':
 	unittest.main()
