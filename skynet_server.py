@@ -259,23 +259,10 @@ def contact(username, friend):
     fri = session.query(Usuario).filter(Usuario.username == friend).one()
     name = fri.nombre + " " + fri.apellido
     #Get image
-    img = None
-    q = session.query(exists().where(and_(Fotos.uid == fri.id, Fotos.profile == True))).scalar()
-    if q:
-        picture = session.query(Fotos).filter(and_(Fotos.uid == fri.id, Fotos.profile == True)).one()
-        img = picture.img_url
+    img = getImage(fri.id, True)
     #Get publication of user
     q = session.query(exists().where(Publicacion.uid == fri.id)).scalar()
-    publicaciones = []
-    if q:
-        pub = session.query(Publicacion).filter(Publicacion.uid == fri.id).all()
-        for p in pub:
-            publicacion = {}
-            publicacion["img"] = img
-            publicacion["name"] = name
-            publicacion["text"] = p.texto
-            publicacion["fecha"] = p.fecha
-            publicaciones.append(publicacion)
+    publicaciones = getPublicaciones(fri.id, False)
     return render_template("friend.html", username = username, friendname = friend, filename = img, User = name, publicaciones = publicaciones)
 
 if __name__ == '__main__':
