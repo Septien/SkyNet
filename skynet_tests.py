@@ -241,5 +241,38 @@ class SkynetTestCase(unittest.TestCase):
 		rv = self.app.post("/johns/profile", data = dict(publish = "Publication test."), follow_redirects = True)
 		assert "Publication test." in rv.data
 
+	def test_friend(self):
+		"""
+		Test the friend function. Accept POST and GET method. If the method is GET, check for the user to be connected.
+		If so, returns to home page. If not, returns to index.
+		If method is POST:
+			-Check if something was introduced, if not, it indicates to the user.
+			-Check if the user exists on database, if not, it tells to the user.
+			-Get all the user from database with a string like the one introduced on their name, last name or username.
+		"""
+		rv = self.app.get("/sakura/friend", follow_redirects = True)
+		assert "Username" in rv.data
+		assert "Password" in rv.data
+		assert "Login" in rv.data
+
+		rv = self.app.get("/johns/friend")
+		assert "HOME" in rv.data
+
+		rv = self.app.post("/sakura/friend", data = dict(user = "s"), follow_redirects = True)
+		assert "Username" in rv.data
+		assert "Password" in rv.data
+		assert "Login" in rv.data
+
+		rv = self.app.post("johns/friend", data = dict(user = ""), follow_redirects = True)
+		assert "User not introduced" in rv.data
+
+		rv = self.app.post("johns/friend", data = dict(user = "pikachu"), follow_redirects = True)
+		assert "User not found" in rv.data
+
+		rv = self.app.post("johns/friend", data = dict(user = "s"), follow_redirects = True)
+		assert "Luis Perez" in rv.data
+		assert "Sakura Card Captor" in rv.data
+		assert "Sofia Fiorelli" in rv.data
+
 if __name__ == '__main__':
 	unittest.main()
