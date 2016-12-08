@@ -134,6 +134,20 @@ class SkynetTestCase(unittest.TestCase):
 		assert user.conectado == True
 		assert user.disponibilidad == True
 
+	def test_userlogoutMethod(self):
+		"""
+		Test the logout function. Only accepts the GET method.
+		"""
+		session = self.DBSession()
+		rv = self.app.get("/johns/logout", follow_redirects = True)
+		user = session.query(Usuario).filter(Usuario.username == "johns").one()
+		assert user.conectado == False
+		assert user.disponibilidad == False
+
+		assert "Username" in rv.data
+		assert "Password" in rv.data
+		assert "Login" in rv.data
+
 	def test_getImage(self):
 		"""
 		Test the function getImage. If the user has no image, returns None. Otherwise returns the url for it.
@@ -288,20 +302,6 @@ class SkynetTestCase(unittest.TestCase):
 
 		rv = self.app.get("/johns/friend/sakura", follow_redirects = True)
 		assert "Sakura Card Captor" in rv.data
-
-	def test_logout(self):
-		"""
-		Test the logout function. Only accepts the GET method.
-		"""
-		session = self.DBSession()
-		rv = self.app.get("/johns/logout", follow_redirects = True)
-		user = session.query(Usuario).filter(Usuario.username == "johns").one()
-		assert user.conectado == False
-		assert user.disponibilidad == False
-
-		assert "Username" in rv.data
-		assert "Password" in rv.data
-		assert "Login" in rv.data
 
 if __name__ == '__main__':
 	unittest.main()
