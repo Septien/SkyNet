@@ -29,6 +29,20 @@ app.secret_key = 'super_secret_key'
 @app.route("/", methods = ['POST', 'GET'])
 @app.route("/index", methods = ['POST', 'GET'])
 def index():
+    """
+    Method Index. In charge of displaying the initial page when the user acces the page for the first time (when
+    enter the url of the page). Accept two methods: GET and POST.
+    When the method is POST:
+        -Check if the email and password were introduces.
+        -Check if the email has the standard format (somethind@somethingelse.se).
+        -Check if the user is already register.
+        -Check if the password corresponde to the one of the user.
+        -If some or all of the previous is false, it tells the user what is wrong.
+        -If all went fine, update the status of the user on the database, by telling it that the user is connected.
+        -Extract the username from the email and send the template for the home page of the user.
+    If the method is GET:
+        -Simple returns the template for the index page.
+    """
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -67,6 +81,20 @@ def index():
 
 @app.route("/register", methods = ['GET', 'POST'])
 def register():
+    """
+    Method for register. Is in charge of displaying the template for the register page. Once the user is succesfully 
+    registered, it redirects to the new home page of the user. Accept two methods: GET and POST.
+    If the method is POST:
+        -Get the necesary data sent by the user to the server (first name, last name, email and passsword).
+        -Check if some of the fields are empty.
+        -Check if the email has the standard format.
+        -Check if the email entered is already on the database.
+        -If some of the previous condition is false, it tells the user, and redirect to the register page.
+        -If all went fine, extract the username from the email, and create a new instance of Usuario. Fills
+        the fields with the corresponding variables sent, and set the status of the user to available on the server.
+    If the method is GET:
+        -Send the template corresonding to the register page.
+    """
     if request.method == 'POST':
         name = request.form['name']
         lastname = request.form['LastName']
@@ -100,7 +128,10 @@ def register():
         return render_template("register.html")
 
 def getImage(uid, profile):
-    """Get the image asociated with the user. profile: indicate if the image is the profile one"""
+    """
+    Get the image asociated with the user. profile: indicate if the image is the profile one.
+    Check if the image exists on the database, if not, returns null.
+    """
     img = None
     q = session.query(exists().where(and_(Fotos.uid == uid, Fotos.profile == True))).scalar()
     if q:
@@ -110,7 +141,7 @@ def getImage(uid, profile):
 
 def getContactos(uid):
     """
-    Get the contacts of the user
+    Get the contacts of the user with id uid.
     """
     amigos = session.query(Amigos).filter(Amigos.uid == uid).all()
     contactos = []
@@ -129,6 +160,7 @@ def getPublicaciones(uid, u):
     """
     Get the publications corresponding to the user with id: uid.
     u: boolean variable that indicates if the uid correspond to the logged user.
+    Check if the user has publications. If not, returns null.
     """
     publicaciones = []
     user = session.query(Usuario).filter(Usuario.id == uid).one()
@@ -150,6 +182,22 @@ def getPublicaciones(uid, u):
 #/<string:username>, username
 @app.route("/<string:username>/home")
 def home(username):
+    """
+    Method for home. In charge of displaying the home page of the user. It can be accesed via the index, register and
+    profile page. It displays the contacts of the user and their publications, includding the ones of the user. Each name 
+    of the users is a link to their corresponding home page. It accepts only the GET method.
+    The function first check if the user exists, or is already register, on the database. If not, it let know the user and
+    redirect it to the index page. This method assumes that the user comes from that page.
+    
+    It aslo has a condition to check if the user status on the server is connected, to prevent accesing the home page
+    from outside, without the proper authorization. In such case, just redirect to the index page without saying nothing.
+    
+    If all went fine, the method get the contacts of the user (name, image if have, and username) and their ids. With the ids
+    of the user, the method get the publications of the friends of the user.
+    
+    With this, display the corresponding template with the information gathered-
+    username: Username of the user.
+    """
     q = session.query(exists().where(Usuario.username == username)).scalar()
     if not q:
         flash("User not registered")
@@ -173,6 +221,24 @@ def home(username):
 
 @app.route("/<string:username>/profile",methods = ['GET', 'POST'])
 def profile(username):
+    """
+    Metod for the profile. In charge of displaying the profile page of the user. It can be accesed only via the home page.
+    Displays the image en the full name of the user and its publications. It has a text area where the user can introduce
+    text to make a publication. It accepts the methods POST and GET.
+    If the method is POST:
+        -Check first if the user exists, if not, it redirects to the index page.
+        -It is used when the user publish something.
+        -Check if something was introduced on the text area, if not, it let know the user and redirect to the profile page.
+        -If theres something on the text area, it creates a new instance of the table Publicacion, binding the publication
+        to the user, and filling the text field with the recieved information.
+        -Redirects to the profile page.
+    If the method is GET:
+        -Check if the user is connected, if not, it redirects to the index page.
+        -Get the user from the database.
+        -Get the image of the user from the database.
+        -Get the publications of the user.
+        -Returns the template of the profile paged filled with the gathered information.
+    """
     if request.method == 'POST':
         user = session.query(Usuario).filter(Usuario.username == username).one()
         if not user.conectado:
@@ -204,6 +270,24 @@ def profile(username):
 
 @app.route("/<string:username>/friend", methods = ['POST', 'GET'])
 def friend(username):
+    """
+    Method friend. It is use to search for users on the database according to a pattern introduced by the user.
+    The pattern can be from a single letter, to a full name. It is accesible from the search button at the top of the 
+    home page and profile page of the user, and others users home page. Although the index and register page have also such button, it has no effect.
+    It accepts two methods: GET and POST.
+    If the method is POST:
+        -Check if the user is connected. If not, it redirects to the index page.
+        -Check if it was introduce something on the field, it not, returns to the home page (regardless of where it comes
+         from), and let the user know there is a field missing.
+        -Create a reg exp that the database can recognize, so it can return any match that contains the string passed.
+        -Searches in the database to see if at leas one such user exists. If not, it let know user.
+        -If at leas one such user exists, it retrieves all the contacts (or contact) that match such pattern, including
+        their full name, username, and profile image.
+        -Returns the page that contains all the information gathered previously.
+    If the method is GET:
+        -Check if the user is connected. If not, it redirects to the index page.
+        -Redirects to the home page.
+    """
     if request.method == 'POST':
         user = session.query(Usuario).filter(Usuario.username == username).one()
         if not user.conectado:
@@ -242,6 +326,10 @@ def friend(username):
 
 @app.route('/<string:username>/logout')
 def logout(username):
+    """
+    Function for loging out the user. Get the user from database and update the status of it.
+    Set the user to unavailable.
+    """
     #Get user
     user = session.query(Usuario).filter(Usuario.username == username).one()
     #Update status of user
@@ -253,6 +341,19 @@ def logout(username):
 
 @app.route('/<string:username>/friend/<string:friend>')
 def contact(username, friend):
+    """
+    Function Contact. Displays the home page of a friend of the contact. It differs from home page of the user, in that
+    the user can access only the wall and the view the photos of the user. Only accepts the GET method.
+    In the wall page it displays all the publications of and to the user.
+    It displays a text area where the user can publish to the friend (not implemented yet).
+
+    First check if the user is connected to the server, if not, redirect to the index page. It prevents accesing the page
+    without the proper authorization. Then check if the friend actually exists on the database, if not, it let know the user
+    and returns to the home page of the user.
+
+    If all went fine, it get the name of the user, it image, and the publications of the friend.
+    Returns the template of the friend's home page.
+    """
     user = session.query(Usuario).filter(Usuario.username == username).one()
     if not user.conectado:
         return redirect(url_for("index"))
